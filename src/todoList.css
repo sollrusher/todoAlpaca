@@ -1,0 +1,14 @@
+.main__head h1{
+    font-size: 4em;
+    margin: 0;
+
+}
+.main__head h2{
+    margin: 0 0 100px 0;
+
+    font-size: 3em;
+}
+.main__list li{
+   font-size: 2em;
+   margin: 15px;
+}
