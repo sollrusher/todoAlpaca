@@ -16,6 +16,11 @@ const sequelize = new Sequelize(config.dbName, config.user, config.password, {
   host: config.host,
 });
 
+// app.use(cors());
+
+app.use('/register', register);
+/* app.use('/auth', auth);
+ */
 sequelize
   .sync()
   .then(() => {
@@ -23,4 +28,3 @@ sequelize
       console.log('Сервер ожидает подключения...');
     });
   })
-  .catch((res) => res.status(418).send('Server not working'));
