@@ -1,12 +1,22 @@
 import { React } from 'react';
 import { Component } from 'react';
 import './todoList.css'
+import TodoItem from './todo-item';
+import api from './utils/api';
 
 export default class TodoList extends Component{
     constructor(props) {
         super(props)
+        
     }
-
+    async componentDidMount() {
+        try {
+            let cards= await api.get('/allcards')
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
     render(){
         const name = 'Данила'
         return(
@@ -17,6 +27,7 @@ export default class TodoList extends Component{
                 </section>
                 <section className="main__list">
                     <ul>
+                        <TodoItem></TodoItem>
                         <li>Выкинуть мусор</li>
                         <li>Вынести дверь</li>
                         <li>Возвеличивать царя</li>
@@ -25,4 +36,5 @@ export default class TodoList extends Component{
             </section>
         )
     }
+
 }

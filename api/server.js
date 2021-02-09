@@ -20,7 +20,7 @@ const sequelize = new Sequelize(config.dbName, config.user, config.password, {
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const jsonParser = bodyParser.json({ extended: false });
 
-// app.use(cors());
+app.use(cors());
 app.use(urlencodedParser);
 app.use(jsonParser);
 
