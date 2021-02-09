@@ -4,6 +4,20 @@ import './authPage.css'
 export default class Auth extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      login: '',
+      password: ''
+    };
+  }
+
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   render() {
@@ -11,15 +25,15 @@ export default class Auth extends Component {
       <section className="auth">
         <div className="auth__inputs">
           <p>
-            Логин: <input type="text"></input>
+            Логин: <input type="text" name='login' value={this.state.login} onChange={this.handleInputChange}/>
           </p>
           <p>
-            Пароль: <input type="password"></input>
+            Пароль: <input type="password" name='password' value={this.state.password} onChange={this.handleInputChange}/>
           </p>
         </div>
         <div className="auth__buttons">
-            <input type="button" value="Регистрация"></input>
-            <input type="button" value="Войти"></input>
+            {/* <input type="button" value="Регистрация"></input> */}
+            <input type="button" value="Войти"/>
         </div>
       </section>
     );
