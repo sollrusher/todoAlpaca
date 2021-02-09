@@ -4,9 +4,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const config = require('./config').database;
-const newcard = require('./routes/new-cards');
-const allcards = require('./routes/all-cards');
-const toggledone = require('./routes/toggle-done-cards')
+const newCard = require('./routes/new-cards');
+const allCards = require('./routes/all-cards');
+const toggleDone = require('./routes/toggle-done-cards')
+const deleteCard = require('./routes/delete-card')
+
 
 const app = express();
 
@@ -22,9 +24,10 @@ const jsonParser = bodyParser.json({ extended: false });
 app.use(urlencodedParser);
 app.use(jsonParser);
 
-app.use('/newcard', newcard);
-app.use('/allcards', allcards);
-app.use('/toggledone', toggledone)
+app.use('/newcard', newCard);
+app.use('/allcards', allCards);
+app.use('/toggledone', toggleDone);
+app.use('/deletecard', deleteCard)
 
 sequelize
   .sync()
