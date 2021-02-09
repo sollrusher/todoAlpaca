@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const config = require('./config').database;
 const newcard = require('./routes/new-cards');
 const allcards = require('./routes/all-cards');
+const toggledone = require('./routes/toggle-done-cards')
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(jsonParser);
 
 app.use('/newcard', newcard);
 app.use('/allcards', allcards);
-
+app.use('/toggledone', toggledone)
 
 sequelize
   .sync()
