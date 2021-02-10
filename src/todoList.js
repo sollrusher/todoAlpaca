@@ -47,9 +47,27 @@ export default class TodoList extends Component {
             cards: oldArr,
           },
         });
+        this.setState({
+          newCard: ''
+        })
       }
     }
   };
+
+  onDelete = (id) => {
+    const oldArr = this.state.cards.filter(item=>{
+      if(item.id !== id)
+      return item
+    });
+    this.setState({
+      ...this.state,
+      ...{
+        cards: oldArr,
+      },
+    });
+
+    api.delete("/deletecard", { data: {id: id} });
+  }
 
   render() {
     const name = "Данила";
@@ -63,6 +81,7 @@ export default class TodoList extends Component {
             title={element.title}
             done={element.done}
             createdAt={element.createdAt}
+            onDelete={() => this.onDelete(element.id)}
           />
         );
       });
@@ -84,6 +103,7 @@ export default class TodoList extends Component {
           />
           <h2>Ваши запланированые дела: </h2>
         </section>
+
         <section className="main__list">
           <ul>{todos}</ul>
         </section>

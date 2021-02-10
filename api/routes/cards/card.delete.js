@@ -18,6 +18,10 @@ router.delete('/', async(req, res) =>{
         }
 
         const {id} = req.body;
+        const card = models.Cards.findOne({ where: { id } });
+        if (!card) {
+            throw new ServerError('Card not found', 404);
+        }
         models.Cards.destroy({ where: { id }},
         );
         const {title} = card;

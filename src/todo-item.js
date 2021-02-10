@@ -1,11 +1,12 @@
 import { React } from 'react';
+import './todo-item.css'
 
-export default function TodoItem ({id, title, done, createdAt}){
-    console.log(title)
-    
+export default function TodoItem ({id, title, done, createdAt, onDelete}){
+    let classer;
+    done? classer='done': classer = ''
     return(
-        <li>
-            <p>{title}<input type="checkbox" checked={done}></input></p>
+        <li key={id}>
+            <p className={classer} > <span className="edit">&#10000;</span> {title}<span className="delete" onClick={onDelete}/></p>
         </li>
     )
 }
