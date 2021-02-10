@@ -1,12 +1,12 @@
 const express = require('express');
 
 const router = express.Router();
-const models = require('../models');
+const models = require('../../models');
 
 router.delete('/', async(req, res) =>{
     try {
         if ( !req.body.id){
-            throw new Error ('Empty fields')
+            return res.status(400).json('Empty fields');
         }
 
         const {id} = req.body;
@@ -20,7 +20,7 @@ router.delete('/', async(req, res) =>{
         res.json({id: id, title: title})
 
     } catch (error) {
-        return res.json({message: error.message})
+        return res.status(400).json(error.message);
     }
 })
 

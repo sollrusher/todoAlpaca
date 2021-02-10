@@ -4,10 +4,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const config = require('./config').database;
-const newCard = require('./routes/new-cards');
-const allCards = require('./routes/all-cards');
-const toggleDone = require('./routes/toggle-done-cards')
-const deleteCard = require('./routes/delete-card')
+const newCard = require('./routes/cards/new-card.post');
+const allCards = require('./routes/cards/cards.get');
+const toggleDone = require('./routes/cards/toggle-done-card.put')
+const deleteCard = require('./routes/cards/card.delete')
 
 
 const app = express();

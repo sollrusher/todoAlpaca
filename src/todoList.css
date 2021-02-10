@@ -8,6 +8,16 @@
 
     font-size: 3em;
 }
+
+.newItem{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid grey;
+    text-align: center;
+    outline: none;
+    font-size: 2em
+}
+
 .main__list li{
    font-size: 2em;
    margin: 15px;

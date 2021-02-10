@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const models = require('../models');
+const models = require('../../models');
 
 router.post('/', async(req, res) =>{
     try {
@@ -14,7 +14,8 @@ router.post('/', async(req, res) =>{
             title,
             done: false
           });
-        return res.json({cards: card})
+          const {id, createdAt, done} = card
+        return res.json({cards: {id, title, createdAt, done}})
 
     } catch (error) {
         return res.json({message: error.message})
