@@ -3,17 +3,22 @@ const express = require('express');
 const router = express.Router();
 const models = require('../../models');
 
+function ServerError(message, code) {
+  this.message = message || 'Ошибка!';
+  this.status = code || 400;
+  this.stack = (new Error()).stack;
+}
+ServerError.prototype = Object.create(Error.prototype);
+ServerError.prototype.constructor = ServerError;
+
 router.put('/', async(req, res) =>{
     try {
         if ( !req.body.id || !req.body.title){
-            throw new Error ('Empty fields')
+          throw new ServerError('Empty fields', 400);
         }
 
         const {id, title} = req.body;
-        const card = models.Cards.findOne({ where: { id } });
-        if (!card) {
-          throw new Error('Card not found');
-        }
+
         models.Cards.update(
           {
             title,
@@ -24,7 +29,7 @@ router.put('/', async(req, res) =>{
         res.json({id: id, title: title})
 
     } catch (error) {
-        return res.json({message: error.message})
+      return res.status(error.status).json(error.message);
     }
 })
 

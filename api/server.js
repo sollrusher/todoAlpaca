@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const config = require('./config').database;
 const newCard = require('./routes/cards/new-card.post');
 const allCards = require('./routes/cards/cards.get');
-const toggleDone = require('./routes/cards/toggle-done-card.put')
+const renameCard = require('./routes/cards/rename-card.put')
 const deleteCard = require('./routes/cards/card.delete')
 
 
@@ -26,7 +26,7 @@ app.use(jsonParser);
 
 app.use('/newcard', newCard);
 app.use('/allcards', allCards);
-app.use('/toggledone', toggleDone);
+app.use('/renamecard', renameCard);
 app.use('/deletecard', deleteCard)
 
 sequelize

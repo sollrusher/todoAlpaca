@@ -3,10 +3,18 @@ const express = require('express');
 const router = express.Router();
 const models = require('../../models');
 
+function ServerError(message, code) {
+  this.message = message || 'Ошибка!';
+  this.status = code || 400;
+  this.stack = (new Error()).stack;
+}
+ServerError.prototype = Object.create(Error.prototype);
+ServerError.prototype.constructor = ServerError;
+
 router.post('/', async(req, res) =>{
     try {
         if(!req.body.title) {
-            throw new Error('Empty field');
+          throw new ServerError('Empty fields', 400);
           }
         const {title} = req.body;
         
@@ -18,7 +26,7 @@ router.post('/', async(req, res) =>{
         return res.json({cards: {id, title, createdAt, done}})
 
     } catch (error) {
-        return res.json({message: error.message})
+        return res.status(error.status).json(error.message)
     }
 })
 
