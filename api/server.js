@@ -8,6 +8,8 @@ const newCard = require('./routes/cards/new-card.post');
 const allCards = require('./routes/cards/cards.get');
 const renameCard = require('./routes/cards/rename-card.put')
 const deleteCard = require('./routes/cards/card.delete')
+const toggleDone = require('./routes/cards/toggle-done-card.put')
+
 
 
 const app = express();
@@ -28,6 +30,7 @@ app.use('/newcard', newCard);
 app.use('/allcards', allCards);
 app.use('/renamecard', renameCard);
 app.use('/deletecard', deleteCard)
+app.use('/toggledone', toggleDone)
 
 sequelize
   .sync()
