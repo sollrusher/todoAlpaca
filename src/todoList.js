@@ -55,18 +55,36 @@ export default class TodoList extends Component {
   };
 
   onDelete = (id) => {
-    const oldArr = this.state.cards.filter(item=>{
+    const newArr = this.state.cards.filter(item=>{
       if(item.id !== id)
       return item
     });
     this.setState({
       ...this.state,
       ...{
-        cards: oldArr,
+        cards: newArr,
       },
     });
 
     api.delete("/deletecard", { data: {id: id} });
+  }
+
+  onToggle = (id) => {
+    const newArr = this.state.cards.filter(item=>{
+      if(item.id == id)
+      {
+        item.done = !item.done
+      }
+      return item
+    });
+    this.setState({
+      ...this.state,
+      ...{
+        cards: newArr,
+      },
+    });
+
+    api.put("/toggledone", { id });
   }
 
   render() {
@@ -82,6 +100,7 @@ export default class TodoList extends Component {
             done={element.done}
             createdAt={element.createdAt}
             onDelete={() => this.onDelete(element.id)}
+            onToggle={() => this.onToggle(element.id)}
           />
         );
       });

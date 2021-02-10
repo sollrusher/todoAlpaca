@@ -27,6 +27,11 @@ li{
 .delete:after {
   transform: rotate(-45deg);
 }
+
+p{
+  user-select: none;
+}
+
 .done {
     text-decoration: line-through;
 }
