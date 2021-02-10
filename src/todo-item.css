@@ -32,6 +32,15 @@ p{
   user-select: none;
 }
 
+.item__edit{
+  height: 32px;
+  margin: 0 0 0 15px;
+}
+
+.block{
+  display: none;
+}
+
 .done {
     text-decoration: line-through;
 }

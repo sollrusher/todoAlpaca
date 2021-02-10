@@ -9,6 +9,9 @@ export default class TodoList extends Component {
     super(props);
     this.state = {
       newCard: "",
+      edittable: false,
+      editId: '',
+      editCard: ''
     };
   }
   async componentDidMount() {
@@ -29,7 +32,8 @@ export default class TodoList extends Component {
   }
 
   handleChange = (event) => {
-    this.setState({ newCard: event.target.value });
+    const name = event.target.name;
+    this.setState({ [name]: event.target.value });
   };
 
   handleSubmit = async (event) => {
@@ -87,6 +91,21 @@ export default class TodoList extends Component {
     api.put("/toggledone", { id });
   }
 
+  toggleEdit=(id)=>{
+    this.setState({edittable: !this.state.edittable})
+    this.setState({editId: id})
+  }
+
+  handleEditSubmit = (event) => {
+    if (event.key == "Enter" && this.state.editCard !== "") {
+      const value = this.state.editCard
+      const id = this.state.editId
+      api.put("/renamecard", {id, title: value})
+      this.setState({edittable: !this.state.edittable})
+    }
+  }
+
+
   render() {
     const name = "Данила";
     console.log("gagagagagag - ", this.state);
@@ -101,12 +120,13 @@ export default class TodoList extends Component {
             createdAt={element.createdAt}
             onDelete={() => this.onDelete(element.id)}
             onToggle={() => this.onToggle(element.id)}
+            toggleEdit={() => this.toggleEdit(element.id)}
           />
         );
       });
     }
-
-    console.log(todos);
+    let hider;
+    this.state.edittable? hider= "" : hider="hide"
     return (
       <section className="main">
         <section className="main__head">
@@ -126,6 +146,8 @@ export default class TodoList extends Component {
         <section className="main__list">
           <ul>{todos}</ul>
         </section>
+        <p className={hider}>Поле для редактирования:  <input name="editCard" type="text" onChange={this.handleChange} onKeyPress={this.handleEditSubmit}
+ /></p>
       </section>
     );
   }
