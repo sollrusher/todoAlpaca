@@ -50,3 +50,10 @@ p{
 .edit:hover{
     opacity: 1;
 }
+
+.dateOfCreate{
+  display: inline;
+  margin-left: 40px;
+  font-size: 0.4em;
+  opacity: 0.5;
+}

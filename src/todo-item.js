@@ -17,13 +17,18 @@ export default function TodoItem({
 let block;
 edittable? block="item__edit" : block="block"
 
+let dateOfCreate= createdAt;
+
+const regex = /[TZ]/gm
+dateOfCreate = dateOfCreate.replace(regex, ' ');
+
 
   return (
     <li key={id}>
       <p className={linethrough} onDoubleClick={onToggle}>
         <span className="edit" onClick={toggleEdit}>&#10000;</span>
         {title}
-        <span className="delete" onClick={onDelete} />
+        <span className="delete" onClick={onDelete} /><p className="dateOfCreate">{dateOfCreate}</p>
       </p>
     </li>
   );

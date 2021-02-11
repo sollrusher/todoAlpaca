@@ -91,18 +91,35 @@ export default class TodoList extends Component {
     api.put("/toggledone", { id });
   }
 
-  toggleEdit=(id)=>{
+  toggleEdit=(id, title)=>{
     this.setState({edittable: !this.state.edittable})
     this.setState({editId: id})
+    this.setState({editCard: title})
   }
 
-  handleEditSubmit = (event) => {
+  handleEditSubmit = async (event) => {
     if (event.key == "Enter" && this.state.editCard !== "") {
       const value = this.state.editCard
       const id = this.state.editId
-      api.put("/renamecard", {id, title: value})
+      await api.put("/renamecard", {id, title: value})
       this.setState({edittable: !this.state.edittable})
-    }
+
+      try {  //not the best solution
+        let cards = await api.get("/allcards");
+        if (!cards) throw new Error("Todo list is empty");
+        console.log(cards.data.cards);
+  
+        this.setState({
+          ...this.state,
+          ...{
+            cards: cards.data.cards,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      }
   }
 
 
@@ -120,7 +137,7 @@ export default class TodoList extends Component {
             createdAt={element.createdAt}
             onDelete={() => this.onDelete(element.id)}
             onToggle={() => this.onToggle(element.id)}
-            toggleEdit={() => this.toggleEdit(element.id)}
+            toggleEdit={() => this.toggleEdit(element.id, element.title)}
           />
         );
       });
@@ -146,7 +163,7 @@ export default class TodoList extends Component {
         <section className="main__list">
           <ul>{todos}</ul>
         </section>
-        <p className={hider}>Поле для редактирования:  <input name="editCard" type="text" onChange={this.handleChange} onKeyPress={this.handleEditSubmit}
+        <p className={hider}>Поле для редактирования:  <input name="editCard" type="text" value={this.state.editCard} onChange={this.handleChange} onKeyPress={this.handleEditSubmit}
  /></p>
       </section>
     );

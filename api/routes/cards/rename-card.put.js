@@ -19,14 +19,21 @@ router.put('/', async(req, res) =>{
 
         const {id, title} = req.body;
 
-        models.Cards.update(
+        const card = await models.Cards.findOne({ where: { id } });
+        if (!card) {
+            throw new ServerError('Card not found', 404);
+        }
+
+        const updateCard = await models.Cards.update(
           {
             title,
           },
           { where: { id } },
         );
 
-        res.json({id: id, title: title})
+        const { createdAt, done} = card
+
+        res.json({id: id, title: title, createdAt, done, })
 
     } catch (error) {
       return res.status(error.status).json(error.message);
