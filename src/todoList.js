@@ -12,12 +12,13 @@ export default class TodoList extends Component {
       edittable: false,
       editId: '',
       editCard: '',
-      filter: 'all'
+      filter: 'all',
+      chrono: false,
     };
   }
   async componentDidMount() {
     try {
-      let cards = await api.post("/allcards", {filter: this.state.filter});
+      let cards = await api.post("/allcards", {filter: this.state.filter, chrono: this.state.chrono});
       if (!cards) throw new Error("Todo list is empty");
       console.log(cards);
 
@@ -106,7 +107,7 @@ export default class TodoList extends Component {
       this.setState({edittable: !this.state.edittable})
 
       try {  //not the best solution
-        let cards = await api.post("/allcards", {filter: this.state.filter});
+        let cards = await api.post("/allcards", {filter: this.state.filter, chrono: this.state.chrono});
         if (!cards) throw new Error("Todo list is empty");
         console.log(cards.data.cards);
   
@@ -130,7 +131,27 @@ export default class TodoList extends Component {
         this.setState({filter: value})
 
     try {  //not the best solution
-      let cards = await api.post("/allcards", {filter: value});
+      let cards = await api.post("/allcards", {filter: value, chrono: this.state.chrono});
+      if (!cards) throw new Error("Todo list is empty");
+      console.log(cards.data.cards);
+
+      this.setState({
+        ...this.state,
+        ...{
+          cards: cards.data.cards,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  onChronoChange = async ()=>{
+    const temp = !this.state.chrono
+    this.setState({chrono: temp})
+
+    try {  //not the best solution
+      let cards = await api.post("/allcards", {filter: this.state.filter, chrono: temp});
       if (!cards) throw new Error("Todo list is empty");
       console.log(cards.data.cards);
 
@@ -168,7 +189,17 @@ export default class TodoList extends Component {
     let hider;
     this.state.edittable? hider= "" : hider="hide"
 
-    let {filter} = this.state;
+    let {filter, chrono} = this.state;
+    let chronoDown;
+    let chronoUp;
+
+    if(chrono){
+      chronoUp = 'greendiv'
+      chronoDown = 'reddiv'
+    } else{
+      chronoUp = 'reddiv'
+      chronoDown = 'greendiv'
+    }
 
     return (
       <section className="main">
@@ -176,6 +207,10 @@ export default class TodoList extends Component {
           <input type="button" value="all" className={filter == 'all'? 'green' : ''} onClick={this.toggleFilter}/>
           <input type="button" value="done" className={filter == 'done'? 'green' : ''} onClick={this.toggleFilter}/>
           <input type="button" value="undone" className={filter == 'undone'? 'green' : ''} onClick={this.toggleFilter}/>
+        </section>
+        <section className="main__left-toggler" onClick={this.onChronoChange}>
+          <div className={`diver ${chronoDown}`} ><p>По хронологии</p></div>
+          <div className={`diver ${chronoUp}`}><p>В обратной хронологии</p></div>
         </section>
 
         <section className="main__head">
