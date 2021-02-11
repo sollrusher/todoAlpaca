@@ -11,14 +11,15 @@ export default class TodoList extends Component {
       newCard: "",
       edittable: false,
       editId: '',
-      editCard: ''
+      editCard: '',
+      filter: 'all'
     };
   }
   async componentDidMount() {
     try {
-      let cards = await api.get("/allcards");
+      let cards = await api.post("/allcards", {filter: this.state.filter});
       if (!cards) throw new Error("Todo list is empty");
-      console.log(cards.data.cards);
+      console.log(cards);
 
       this.setState({
         ...this.state,
@@ -105,7 +106,7 @@ export default class TodoList extends Component {
       this.setState({edittable: !this.state.edittable})
 
       try {  //not the best solution
-        let cards = await api.get("/allcards");
+        let cards = await api.post("/allcards", {filter: this.state.filter});
         if (!cards) throw new Error("Todo list is empty");
         console.log(cards.data.cards);
   
@@ -120,6 +121,28 @@ export default class TodoList extends Component {
       }
 
       }
+  }
+
+  toggleFilter = async (event) => {
+    const value = event.target.value;
+    console.log(value)
+
+        this.setState({filter: value})
+
+    try {  //not the best solution
+      let cards = await api.post("/allcards", {filter: value});
+      if (!cards) throw new Error("Todo list is empty");
+      console.log(cards.data.cards);
+
+      this.setState({
+        ...this.state,
+        ...{
+          cards: cards.data.cards,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
 
@@ -144,8 +167,17 @@ export default class TodoList extends Component {
     }
     let hider;
     this.state.edittable? hider= "" : hider="hide"
+
+    let {filter} = this.state;
+
     return (
       <section className="main">
+        <section className="main__left">
+          <input type="button" value="all" className={filter == 'all'? 'green' : ''} onClick={this.toggleFilter}/>
+          <input type="button" value="done" className={filter == 'done'? 'green' : ''} onClick={this.toggleFilter}/>
+          <input type="button" value="undone" className={filter == 'undone'? 'green' : ''} onClick={this.toggleFilter}/>
+        </section>
+
         <section className="main__head">
           <h1>Здравствуйте, {name}</h1>
           <input

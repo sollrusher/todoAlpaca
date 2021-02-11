@@ -11,7 +11,8 @@ function ServerError(message, code) {
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
+  console.log(req.body)
   try {
     if (!req.body.filter) throw new ServerError("Filter was missing", 400);
 

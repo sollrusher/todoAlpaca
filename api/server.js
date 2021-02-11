@@ -10,8 +10,6 @@ const renameCard = require('./routes/cards/rename-card.put')
 const deleteCard = require('./routes/cards/card.delete')
 const toggleDone = require('./routes/cards/toggle-done-card.put')
 
-
-
 const app = express();
 
 const sequelize = new Sequelize(config.dbName, config.user, config.password, {
