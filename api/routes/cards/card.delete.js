@@ -13,11 +13,11 @@ function ServerError(message, code) {
 
 router.delete('/', async(req, res) =>{
     try {
-        if ( !req.body.id){
+        if ( !req.query.id){
             throw new ServerError('Empty fields', 400);
         }
 
-        const {id} = req.body;
+        const {id} = req.query;
         const card = await models.Cards.findOne({ where: { id } });
         if (!card) {
             throw new ServerError('Card not found', 404);

@@ -11,17 +11,17 @@ function ServerError(message, code) {
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.post("/", async (req, res) => {
-  const chrono = req.body.chrono;
-
+router.get("/", async (req, res) => {
+  const chrono = req.query.chrono;
+  console.log(req.query.chrono)
   try {
-    if (!req.body.filter) throw new ServerError("Filter was missing", 400);
+    if (!req.query.filter) throw new ServerError("Filter was missing", 400);
 
-    switch (req.body.filter) {
+    switch (req.query.filter) {
       case "all": {
         const card = await models.Cards.findAll({
           raw: true,
-          order: chrono ? [["createdAt", "DESC"]] : [["createdAt"]],
+          order: (chrono === 'true') ? [["createdAt", "DESC"]] : [["createdAt"]],
         });
         res.json({ cards: card });
         break;
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
         const card = await models.Cards.findAll({
           where: { done: true },
           raw: true,
-          order: chrono ? [["createdAt", "DESC"]] : [["createdAt"]],
+          order: (chrono === 'true') ? [["createdAt", "DESC"]] : [["createdAt"]],
         });
         res.json({ cards: card });
         break;
@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
         const card = await models.Cards.findAll({
           where: { done: false },
           raw: true,
-          order: chrono ? [["createdAt", "DESC"]] : [["createdAt"]],
+          order: (chrono === 'true') ? [["createdAt", "DESC"]] : [["createdAt"]],
         });
         res.json({ cards: card });
         break;

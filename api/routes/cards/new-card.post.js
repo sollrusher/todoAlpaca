@@ -11,7 +11,7 @@ function ServerError(message, code) {
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.post('/', async(req, res) =>{
+router.post('/newcard', async(req, res) =>{
     try {
         if(!req.body.title) {
           throw new ServerError('Empty fields', 400);

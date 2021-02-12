@@ -18,7 +18,7 @@ export default class TodoList extends Component {
   }
   async componentDidMount() {
     try {
-      let cards = await api.post("/allcards", {filter: this.state.filter, chrono: this.state.chrono});
+      let cards = await api.get("/", {params: {filter: this.state.filter, chrono: this.state.chrono}});
       if (!cards) throw new Error("Todo list is empty");
       console.log(cards);
 
@@ -40,7 +40,6 @@ export default class TodoList extends Component {
 
   handleSubmit = async (event) => {
     if (event.key == "Enter" && this.state.newCard !== "") {
-      console.log("enter press here! ");
       const newTodo = await api.post("/newcard", { title: this.state.newCard });
       if (this.state.cards) {
         const oldArr = this.state.cards;
@@ -72,10 +71,10 @@ export default class TodoList extends Component {
       },
     });
 
-    api.delete("/deletecard", { data: {id: id} });
+    api.delete("/", { params: {id: id} });
   }
 
-  onToggle = (id) => {
+  onToggleDone = (id) => {
     const newArr = this.state.cards.filter(item=>{
       if(item.id == id)
       {
@@ -107,7 +106,7 @@ export default class TodoList extends Component {
       this.setState({edittable: !this.state.edittable})
 
       try {  //not the best solution
-        let cards = await api.post("/allcards", {filter: this.state.filter, chrono: this.state.chrono});
+        let cards = await api.get("/", {params: {filter: this.state.filter, chrono: this.state.chrono}});
         if (!cards) throw new Error("Todo list is empty");
         console.log(cards.data.cards);
   
@@ -131,7 +130,7 @@ export default class TodoList extends Component {
         this.setState({filter: value})
 
     try {  //not the best solution
-      let cards = await api.post("/allcards", {filter: value, chrono: this.state.chrono});
+      let cards = await api.get("/", {params: {filter: value, chrono: this.state.chrono}});
       if (!cards) throw new Error("Todo list is empty");
       console.log(cards.data.cards);
 
@@ -147,13 +146,13 @@ export default class TodoList extends Component {
   }
 
   onChronoChange = async ()=>{
-    const temp = !this.state.chrono
-    this.setState({chrono: temp})
+    const reverseChrono = !this.state.chrono
+    this.setState({chrono: reverseChrono})
 
     try {  //not the best solution
-      let cards = await api.post("/allcards", {filter: this.state.filter, chrono: temp});
+
+      let cards = await api.get("/", {params: {filter: this.state.filter, chrono: reverseChrono}});
       if (!cards) throw new Error("Todo list is empty");
-      console.log(cards.data.cards);
 
       this.setState({
         ...this.state,
@@ -180,7 +179,7 @@ export default class TodoList extends Component {
             done={element.done}
             createdAt={element.createdAt}
             onDelete={() => this.onDelete(element.id)}
-            onToggle={() => this.onToggle(element.id)}
+            onToggle={() => this.onToggleDone(element.id)}
             toggleEdit={() => this.toggleEdit(element.id, element.title)}
           />
         );

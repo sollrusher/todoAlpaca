@@ -11,7 +11,7 @@ function ServerError(message, code) {
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.put('/', async(req, res) =>{
+router.put('/toggledone', async(req, res) =>{
     try {
         if ( !req.body.id ){
           throw new ServerError('Empty fields', 400);
