@@ -35,7 +35,9 @@ export default class TodoList extends Component {
 
   handleChange = (event) => {
     const name = event.target.name;
+    if(this.state[name].length < 25) 
     this.setState({ [name]: event.target.value });
+    else return
   };
 
   handleSubmit = async (event) => {
@@ -45,7 +47,6 @@ export default class TodoList extends Component {
         const oldArr = this.state.cards;
 
         oldArr.push(newTodo.data.cards);
-        
         this.setState({
           ...this.state,
           ...{
