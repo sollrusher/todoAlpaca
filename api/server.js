@@ -1,14 +1,15 @@
+require('dotenv').config();
 const Sequelize = require('sequelize');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-require('dotenv').config();
+const klawSync = require('klaw-sync');
+const path = require('path')
 
-const newCard = require('./routes/cards/new-card.post');
-const allCards = require('./routes/cards/cards.get');
-const renameCard = require('./routes/cards/rename-card.put')
-const deleteCard = require('./routes/cards/card.delete')
-const toggleDone = require('./routes/cards/toggle-done-card.put')
+
+const authUser = require('./routes/users/auth-user.get');
+const newUser = require('./routes/users/new-user.post');
+
 
 const app = express();
 
@@ -26,8 +27,7 @@ app.use(cors());
 app.use(urlencodedParser);
 app.use(jsonParser);
 
-const klawSync = require('klaw-sync');
-const path = require('path')
+
 async function useControllers() {
     const paths = klawSync(`${__dirname}/routes/cards`, {nodir: true});
     let controllersCount = 0;
@@ -40,11 +40,9 @@ async function useControllers() {
     console.info(`Total controllers: ${controllersCount}`);
 };
 useControllers()
-// app.use('/newcard', newCard);
-// app.use('/allcards', allCards);
-// app.use('/renamecard', renameCard);
-// app.use('/deletecard', deleteCard)
-// app.use('/toggledone', toggleDone)
+app.use('/authuser', authUser);
+app.use('/newuser', newUser);
+
 
 
 sequelize
