@@ -90,7 +90,7 @@ export default class TodoList extends Component {
       },
     });
 
-    api.put("/toggledone", { id });
+    api.put("/", { id });
   }
 
   toggleEdit=(id, title)=>{
@@ -103,7 +103,7 @@ export default class TodoList extends Component {
     if (event.key == "Enter" && this.state.editCard !== "") {
       const value = this.state.editCard
       const id = this.state.editId
-      await api.put("/renamecard", {id, title: value})
+      await api.put("/", {id, title: value})
       this.setState({edittable: !this.state.edittable})
 
       try {  //not the best solution

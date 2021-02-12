@@ -4,9 +4,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const newCard = require('./routes/cards/new-card.post');
+const newCard = require('./routes/cards/card.post');
 const allCards = require('./routes/cards/cards.get');
-const renameCard = require('./routes/cards/rename-card.put')
+const renameCard = require('./routes/cards/card.put')
 const deleteCard = require('./routes/cards/card.delete')
 const toggleDone = require('./routes/cards/toggle-done-card.put')
 
