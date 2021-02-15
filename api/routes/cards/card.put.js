@@ -1,35 +1,33 @@
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
-const models = require("../../models");
+const models = require('../../models');
+const ServerError = require('../../utils/error-handler');
 
-function ServerError(message, code) {
-  this.message = message || "Ошибка!";
-  this.status = code || 400;
-  this.stack = new Error().stack;
-}
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.put("/", async (req, res) => {
+router.put('/', async (req, res) => {
   try {
     if (!req.body.id) {
-      throw new ServerError("Empty fields", 400);
+      throw new ServerError('Empty fields', 400);
     }
 
     const { id, title } = req.body;
 
     const card = await models.Cards.findOne({ where: { id } });
     if (!card) {
-      throw new ServerError("Card not found", 404);
+      throw new ServerError('Card not found', 404);
     }
-    console.log(title)
+    console.log(title);
     if (title) {
       await models.Cards.update(
         {
           title,
         },
-        { where: { id } }
+        {
+          where: { id },
+        },
       );
 
       const { createdAt, done } = card;
@@ -42,7 +40,7 @@ router.put("/", async (req, res) => {
         {
           done: !done,
         },
-        { where: { id } }
+        { where: { id } },
       );
     }
   } catch (error) {
