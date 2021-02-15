@@ -1,4 +1,5 @@
 const express = require('express');
+const verifyToken = require('../../middlewares/verify-JWT');
 
 const router = express.Router();
 const models = require('../../models');
@@ -6,6 +7,8 @@ const ServerError = require('../../utils/error-handler');
 
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
+
+router.use(verifyToken)
 
 router.put('/', async (req, res) => {
   try {
@@ -19,7 +22,7 @@ router.put('/', async (req, res) => {
     if (!card) {
       throw new ServerError('Card not found', 404);
     }
-    console.log(title);
+
     if (title) {
       await models.Cards.update(
         {

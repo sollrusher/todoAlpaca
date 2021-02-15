@@ -1,5 +1,6 @@
 const { compare } = require('bcryptjs');
 const express = require('express');
+const verifyToken = require('../../middlewares/verify-JWT');
 
 const router = express.Router();
 const models = require('../../models');
@@ -8,6 +9,7 @@ const signJwt = require('../../utils/sign-JWT');
 
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
+
 
 router.post('/login', async (req, res) => {
   try {
