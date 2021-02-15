@@ -7,7 +7,8 @@ import Register from "./registerPage";
 import TodoList from "./todoList";
 
 function App() {
-  const token = 
+  const token = localStorage.getItem('token');
+  
   return (
 
     <Router className="app">

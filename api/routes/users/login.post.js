@@ -23,12 +23,11 @@ router.post('/login', async (req, res) => {
         async (err, decodec) => {
           if (err) throw new ServerError('Wrong token', 400);
           req.userId = decodec.userId;
-          console.log(decodec.userId);
           const user = await models.User.findOne({
             where: { id: decodec.userId },
           });
           const { login } = user;
-          res.json({ login });
+          res.json({ id: req.userId });
         }
       );
     }
