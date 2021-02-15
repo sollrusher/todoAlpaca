@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './authPage.css';
-import api from './utils/api';
+import {onLogin} from './utils/get-user';
 
 export default class Auth extends Component {
   constructor(props) {
@@ -25,8 +25,7 @@ export default class Auth extends Component {
     if (event.key == 'Enter' && this.state.login !== '') {
 
       const { login, password } = this.state
-      const data = await api.post('/login', {login, password})
-      console.log(data.data.id)
+      onLogin(login, password);
     }
   };
 
@@ -56,8 +55,6 @@ export default class Auth extends Component {
           </p>
         </div>
         <div className="auth__buttons">
-          {/* <input type="button" value="Регистрация"></input> */}
-          <input type="button" value="Войти" />
         </div>
       </section>
     );

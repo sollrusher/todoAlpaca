@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import './registerPage.css'
-import api from "./utils/api";
+import { register } from "./utils/get-user";
 
 export default class Register extends Component {
   constructor(props) {
@@ -21,12 +21,11 @@ export default class Register extends Component {
     });
   };
 
-  handleSubmit = async (event) => {
+  handleSubmit = (event) => {
     if (event.key == 'Enter' && this.state.login !== '') {
 
       const { login, password } = this.state
-      const data = await api.post('/signup', {login, password})
-      console.log(data.data.id)
+      register(login, password);
     }
   };
 
@@ -55,10 +54,6 @@ export default class Register extends Component {
               onKeyPress={this.handleSubmit}
             />
           </p>
-        </div>
-        <div className="register__buttons">
-            <input type="button" value="Войти"></input>
-            <input type="button" value="Зарегистрироваться"></input>
         </div>
       </section>
     );
