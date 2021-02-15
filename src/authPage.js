@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './authPage.css';
-import {onLogin} from './utils/get-user';
+import { onLogin } from './utils/get-user';
 
 export default class Auth extends Component {
   constructor(props) {
@@ -23,8 +23,7 @@ export default class Auth extends Component {
 
   handleSubmit = async (event) => {
     if (event.key == 'Enter' && this.state.login !== '') {
-
-      const { login, password } = this.state
+      const { login, password } = this.state;
       onLogin(login, password);
     }
   };
@@ -54,8 +53,7 @@ export default class Auth extends Component {
             />
           </p>
         </div>
-        <div className="auth__buttons">
-        </div>
+        <div className="auth__buttons"></div>
       </section>
     );
   }

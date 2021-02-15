@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import './registerPage.css'
-import { register } from "./utils/get-user";
+import React, { Component } from 'react';
+import './registerPage.css';
+import { register } from './utils/get-user';
 
 export default class Register extends Component {
   constructor(props) {
@@ -23,8 +23,7 @@ export default class Register extends Component {
 
   handleSubmit = (event) => {
     if (event.key == 'Enter' && this.state.login !== '') {
-
-      const { login, password } = this.state
+      const { login, password } = this.state;
       register(login, password);
     }
   };
@@ -32,9 +31,9 @@ export default class Register extends Component {
   render() {
     return (
       <section className="register">
-          <h2>Регистрация</h2>
+        <h2>Регистрация</h2>
         <div className="register__inputs">
-        <p>
+          <p>
             Логин:
             <input
               type="text"

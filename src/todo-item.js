@@ -1,5 +1,5 @@
-import { React } from "react";
-import "./todo-item.css";
+import { React } from 'react';
+import './todo-item.css';
 
 export default function TodoItem({
   id,
@@ -9,26 +9,28 @@ export default function TodoItem({
   onDelete,
   onToggle,
   toggleEdit,
-  edittable
+  edittable,
 }) {
   let linethrough;
-  done ? (linethrough = "done") : (linethrough = "");
+  done ? (linethrough = 'done') : (linethrough = '');
 
-let block;
-edittable? block="item__edit" : block="block"
+  let block;
+  edittable ? (block = 'item__edit') : (block = 'block');
 
-let dateOfCreate= createdAt;
+  let dateOfCreate = createdAt;
 
-const regex = /[TZ]/gm
-dateOfCreate = dateOfCreate.replace(regex, ' ');
-
+  const regex = /[TZ]/gm;
+  dateOfCreate = dateOfCreate.replace(regex, ' ');
 
   return (
     <li key={id}>
       <p className={linethrough} onDoubleClick={onToggle}>
-        <span className="edit" onClick={toggleEdit}>&#10000;</span>
+        <span className="edit" onClick={toggleEdit}>
+          &#10000;
+        </span>
         {title}
-        <span className="delete" onClick={onDelete} /><p className="dateOfCreate">{dateOfCreate}</p>
+        <span className="delete" onClick={onDelete} />
+        <p className="dateOfCreate">{dateOfCreate}</p>
       </p>
     </li>
   );
