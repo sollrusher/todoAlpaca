@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const klawSync = require('klaw-sync');
 const path = require('path');
 
-const authUser = require('./routes/users/auth-user.get');
-const newUser = require('./routes/users/new-user.post');
+const authUser = require('./routes/users/login.post');
+const newUser = require('./routes/users/signUp.post');
 
 const app = express();
 
@@ -29,7 +29,7 @@ app.use(urlencodedParser);
 app.use(jsonParser);
 
 async function useControllers() {
-  const paths = klawSync(`${__dirname}/routes/cards`, { nodir: true });
+  const paths = klawSync(`${__dirname}/routes`, { nodir: true });
   let controllersCount = 0;
   paths.forEach((file) => {
     if (
@@ -44,8 +44,6 @@ async function useControllers() {
   console.info(`Total controllers: ${controllersCount}`);
 }
 useControllers();
-app.use('/authuser', authUser);
-app.use('/newuser', newUser);
 
 app.listen(5000, () => {
   console.log('Сервер ожидает подключения...');

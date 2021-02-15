@@ -1,14 +1,14 @@
-import { React } from "react";
-import { Component } from "react";
-import "./todoList.css";
-import TodoItem from "./todo-item";
-import api from "./utils/api";
+import { React } from 'react';
+import { Component } from 'react';
+import './todoList.css';
+import TodoItem from './todo-item';
+import api from './utils/api';
 
 export default class TodoList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newCard: "",
+      newCard: '',
       edittable: false,
       editId: '',
       editCard: '',
@@ -18,8 +18,10 @@ export default class TodoList extends Component {
   }
   async componentDidMount() {
     try {
-      let cards = await api.get("/", {params: {filter: this.state.filter, chrono: this.state.chrono}});
-      if (!cards) throw new Error("Todo list is empty");
+      let cards = await api.get('/', {
+        params: { filter: this.state.filter, chrono: this.state.chrono },
+      });
+      if (!cards) throw new Error('Todo list is empty');
       console.log(cards);
 
       this.setState({
@@ -35,14 +37,14 @@ export default class TodoList extends Component {
 
   handleChange = (event) => {
     const name = event.target.name;
-    if(this.state[name].length < 25) 
-    this.setState({ [name]: event.target.value });
-    else return
+    if (this.state[name].length < 25)
+      this.setState({ [name]: event.target.value });
+    else return;
   };
 
   handleSubmit = async (event) => {
-    if (event.key == "Enter" && this.state.newCard !== "") {
-      const newTodo = await api.post("/newcard", { title: this.state.newCard });
+    if (event.key == 'Enter' && this.state.newCard !== '') {
+      const newTodo = await api.post('/newcard', { title: this.state.newCard });
       if (this.state.cards) {
         const oldArr = this.state.cards;
 
@@ -54,16 +56,15 @@ export default class TodoList extends Component {
           },
         });
         this.setState({
-          newCard: ''
-        })
+          newCard: '',
+        });
       }
     }
   };
 
   onDelete = (id) => {
-    const newArr = this.state.cards.filter(item=>{
-      if(item.id !== id)
-      return item
+    const newArr = this.state.cards.filter((item) => {
+      if (item.id !== id) return item;
     });
     this.setState({
       ...this.state,
@@ -72,16 +73,15 @@ export default class TodoList extends Component {
       },
     });
 
-    api.delete("/", { params: {id: id} });
-  }
+    api.delete('/', { params: { id: id } });
+  };
 
   onToggleDone = (id) => {
-    const newArr = this.state.cards.filter(item=>{
-      if(item.id == id)
-      {
-        item.done = !item.done
+    const newArr = this.state.cards.filter((item) => {
+      if (item.id == id) {
+        item.done = !item.done;
       }
-      return item
+      return item;
     });
     this.setState({
       ...this.state,
@@ -90,27 +90,30 @@ export default class TodoList extends Component {
       },
     });
 
-    api.put("/toggledone", { id });
-  }
+    api.put('/toggledone', { id });
+  };
 
-  toggleEdit=(id, title)=>{
-    this.setState({edittable: !this.state.edittable})
-    this.setState({editId: id})
-    this.setState({editCard: title})
-  }
+  toggleEdit = (id, title) => {
+    this.setState({ edittable: !this.state.edittable });
+    this.setState({ editId: id });
+    this.setState({ editCard: title });
+  };
 
   handleEditSubmit = async (event) => {
-    if (event.key == "Enter" && this.state.editCard !== "") {
-      const value = this.state.editCard
-      const id = this.state.editId
-      await api.put("/renamecard", {id, title: value})
-      this.setState({edittable: !this.state.edittable})
+    if (event.key == 'Enter' && this.state.editCard !== '') {
+      const value = this.state.editCard;
+      const id = this.state.editId;
+      await api.put('/renamecard', { id, title: value });
+      this.setState({ edittable: !this.state.edittable });
 
-      try {  //not the best solution
-        let cards = await api.get("/", {params: {filter: this.state.filter, chrono: this.state.chrono}});
-        if (!cards) throw new Error("Todo list is empty");
+      try {
+        //not the best solution
+        let cards = await api.get('/', {
+          params: { filter: this.state.filter, chrono: this.state.chrono },
+        });
+        if (!cards) throw new Error('Todo list is empty');
         console.log(cards.data.cards);
-  
+
         this.setState({
           ...this.state,
           ...{
@@ -120,19 +123,21 @@ export default class TodoList extends Component {
       } catch (error) {
         console.log(error);
       }
-
-      }
-  }
+    }
+  };
 
   toggleFilter = async (event) => {
     const value = event.target.value;
-    console.log(value)
+    console.log(value);
 
-        this.setState({filter: value})
+    this.setState({ filter: value });
 
-    try {  //not the best solution
-      let cards = await api.get("/", {params: {filter: value, chrono: this.state.chrono}});
-      if (!cards) throw new Error("Todo list is empty");
+    try {
+      //not the best solution
+      let cards = await api.get('/', {
+        params: { filter: value, chrono: this.state.chrono },
+      });
+      if (!cards) throw new Error('Todo list is empty');
       console.log(cards.data.cards);
 
       this.setState({
@@ -144,16 +149,19 @@ export default class TodoList extends Component {
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
 
-  onChronoChange = async ()=>{
-    const reverseChrono = !this.state.chrono
-    this.setState({chrono: reverseChrono})
+  onChronoChange = async () => {
+    const reverseChrono = !this.state.chrono;
+    this.setState({ chrono: reverseChrono });
 
-    try {  //not the best solution
+    try {
+      //not the best solution
 
-      let cards = await api.get("/", {params: {filter: this.state.filter, chrono: reverseChrono}});
-      if (!cards) throw new Error("Todo list is empty");
+      let cards = await api.get('/', {
+        params: { filter: this.state.filter, chrono: reverseChrono },
+      });
+      if (!cards) throw new Error('Todo list is empty');
 
       this.setState({
         ...this.state,
@@ -164,12 +172,11 @@ export default class TodoList extends Component {
     } catch (error) {
       console.log(error.message);
     }
-  }
-
+  };
 
   render() {
-    const name = "Данила";
-    console.log("gagagagagag - ", this.state);
+    const name = 'Данила';
+    console.log('gagagagagag - ', this.state);
     let todos;
     if (this.state.cards) {
       todos = this.state.cards.map((element) => {
@@ -187,30 +194,49 @@ export default class TodoList extends Component {
       });
     }
     let hider;
-    this.state.edittable? hider= "" : hider="hide"
+    this.state.edittable ? (hider = '') : (hider = 'hide');
 
-    let {filter, chrono} = this.state;
+    let { filter, chrono } = this.state;
     let chronoDown;
     let chronoUp;
 
-    if(chrono){
-      chronoUp = 'greendiv'
-      chronoDown = 'reddiv'
-    } else{
-      chronoUp = 'reddiv'
-      chronoDown = 'greendiv'
+    if (chrono) {
+      chronoUp = 'greendiv';
+      chronoDown = 'reddiv';
+    } else {
+      chronoUp = 'reddiv';
+      chronoDown = 'greendiv';
     }
 
     return (
       <section className="main">
         <section className="main__left">
-          <input type="button" value="all" className={filter == 'all'? 'green' : ''} onClick={this.toggleFilter}/>
-          <input type="button" value="done" className={filter == 'done'? 'green' : ''} onClick={this.toggleFilter}/>
-          <input type="button" value="undone" className={filter == 'undone'? 'green' : ''} onClick={this.toggleFilter}/>
+          <input
+            type="button"
+            value="all"
+            className={filter == 'all' ? 'green' : ''}
+            onClick={this.toggleFilter}
+          />
+          <input
+            type="button"
+            value="done"
+            className={filter == 'done' ? 'green' : ''}
+            onClick={this.toggleFilter}
+          />
+          <input
+            type="button"
+            value="undone"
+            className={filter == 'undone' ? 'green' : ''}
+            onClick={this.toggleFilter}
+          />
         </section>
         <section className="main__left-toggler" onClick={this.onChronoChange}>
-          <div className={`diver ${chronoDown}`} ><p>По хронологии</p></div>
-          <div className={`diver ${chronoUp}`}><p>В обратной хронологии</p></div>
+          <div className={`diver ${chronoDown}`}>
+            <p>По хронологии</p>
+          </div>
+          <div className={`diver ${chronoUp}`}>
+            <p>В обратной хронологии</p>
+          </div>
         </section>
 
         <section className="main__head">
@@ -230,8 +256,16 @@ export default class TodoList extends Component {
         <section className="main__list">
           <ul>{todos}</ul>
         </section>
-        <p className={hider}>Поле для редактирования:  <input name="editCard" type="text" value={this.state.editCard} onChange={this.handleChange} onKeyPress={this.handleEditSubmit}
- /></p>
+        <p className={hider}>
+          Поле для редактирования:{' '}
+          <input
+            name="editCard"
+            type="text"
+            value={this.state.editCard}
+            onChange={this.handleChange}
+            onKeyPress={this.handleEditSubmit}
+          />
+        </p>
       </section>
     );
   }

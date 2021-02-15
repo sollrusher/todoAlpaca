@@ -2,16 +2,12 @@ const express = require("express");
 
 const router = express.Router();
 const models = require("../../models");
+const ServerError = require('../../utils/error-handler');
 
-function ServerError(message, code) {
-  this.message = message || "Ошибка!";
-  this.status = code || 400;
-  this.stack = new Error().stack;
-}
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.post("/", async (req, res) => {
+router.post("/signup", async (req, res) => {
     try {
         if(!req.body.login || !req.body.password) {
           throw new ServerError('Empty fields', 400);
@@ -22,7 +18,7 @@ router.post("/", async (req, res) => {
             login, 
             password
           });
-          const {id, createdAt} = card
+          const {id, createdAt} = user
         return res.json({user: {id, login, createdAt}})
 
     } catch (error) {
