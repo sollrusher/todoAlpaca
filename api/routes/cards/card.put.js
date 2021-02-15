@@ -8,9 +8,7 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-// router.use(verifyToken)
-
-router.put('/', async (req, res) => {
+router.put('/',verifyToken , async (req, res) => {
   try {
     if (!req.body.id) {
       throw new ServerError('Empty fields', 400);

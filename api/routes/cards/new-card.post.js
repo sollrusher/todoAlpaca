@@ -11,8 +11,6 @@ ServerError.prototype.constructor = ServerError;
 
 router.post('/newcard',verifyToken, async (req, res) => {
   try {
-    
-
     if (!req.body.title) {
       throw new ServerError('Empty fields', 400);
     }

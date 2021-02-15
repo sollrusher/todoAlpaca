@@ -5,12 +5,10 @@ const router = express.Router();
 const models = require('../../models');
 const ServerError = require('../../utils/error-handler');
 
-// router.use(verifyToken)
-
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.get('/', async (req, res) => {
+router.get('/',verifyToken , async (req, res) => {
   const chrono = req.query.chrono;
   try {
     if (!req.query.filter) throw new ServerError('Filter was missing', 400);

@@ -1,5 +1,6 @@
 const { compare } = require('bcryptjs');
 const express = require('express');
+const verifyToken = require('../../middlewares/verify-JWT');
 
 const router = express.Router();
 const models = require('../../models');
