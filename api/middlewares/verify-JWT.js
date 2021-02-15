@@ -12,7 +12,7 @@ function verifyToken(req, res, next) {
 
     const bearerToken = bearerHeader.split(' ')[1];
     req.token = bearerToken;
-    return jwt.verify(bearerToken, 'secretjwt', (err, decodec) => {
+    return jwt.verify(bearerToken, process.env.secretJwt, (err, decodec) => {
       if (err) throw new ServerError('Wrong token', 400);
       req.userId = decodec.userId;
       return next();
