@@ -5,7 +5,7 @@ const router = express.Router();
 const models = require('../../models');
 const ServerError = require('../../utils/error-handler');
 
-router.use(verifyToken)
+// router.use(verifyToken)
 
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;

@@ -8,10 +8,11 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.use(verifyToken)
 
-router.post('/newcard', async (req, res) => {
+router.post('/newcard',verifyToken, async (req, res) => {
   try {
+    
+
     if (!req.body.title) {
       throw new ServerError('Empty fields', 400);
     }
