@@ -12,25 +12,6 @@ ServerError.prototype.constructor = ServerError;
 
 router.post('/login', async (req, res) => {
   try {
-    if (req.headers.authorization) {
-      const bearerHeader = req.headers.authorization;
-      if (typeof bearerHeader === 'undefined') return;
-      const bearerToken = bearerHeader.split(' ')[1];
-      req.token = bearerToken;
-      return jwt.verify(
-        bearerToken,
-        process.env.secretJwt,
-        async (err, decodec) => {
-          if (err) throw new ServerError('Wrong token', 400);
-          req.userId = decodec.userId;
-          const user = await models.User.findOne({
-            where: { id: decodec.userId },
-          });
-          const { login } = user;
-          res.json({ id: req.userId });
-        }
-      );
-    }
     if (!req.body.login || !req.body.password) {
       throw new ServerError('Empty fields', 400);
     }
