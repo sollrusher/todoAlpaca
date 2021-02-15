@@ -1,3 +1,4 @@
+const { compare } = require('bcryptjs');
 const express = require('express');
 
 const router = express.Router();
@@ -14,10 +15,15 @@ router.post('/login', async (req, res) => {
       }
     const {login, password} = req.body;
 
-    const user = await models.User.findAll({
-      where: { login, password },
+    const user = await models.User.findOne({
+      where: { login },
     });
-    res.json({ user });
+
+    if(!user) throw new ServerError('User with this login not found', 404)
+    
+    if(!await compare(password, user.password))  throw new ServerError('Password wrong', 406)
+    res.json({ id: user.id })
+
   } catch (error) {
     return res.status(error.status).json(error.message);
   }

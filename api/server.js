@@ -6,8 +6,6 @@ const bodyParser = require('body-parser');
 const klawSync = require('klaw-sync');
 const path = require('path');
 
-const authUser = require('./routes/users/login.post');
-const newUser = require('./routes/users/signUp.post');
 
 const app = express();
 

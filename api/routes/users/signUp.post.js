@@ -2,6 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 const models = require("../../models");
+const cryptPass = require("../../utils/crypPass");
 const ServerError = require('../../utils/error-handler');
 
 ServerError.prototype = Object.create(Error.prototype);
