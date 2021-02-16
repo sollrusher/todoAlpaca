@@ -9,13 +9,15 @@ ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
 router.get('/',verifyToken , async (req, res) => {
-  const chrono = req.query.chrono;
   try {
+    const { userId } = req;
+    const chrono = req.query.chrono;
     if (!req.query.filter) throw new ServerError('Filter was missing', 400);
 
     switch (req.query.filter) {
       case 'all': {
         const card = await models.Cards.findAll({
+          where: { userId },
           raw: true,
           order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
         });
@@ -24,7 +26,7 @@ router.get('/',verifyToken , async (req, res) => {
       }
       case 'done': {
         const card = await models.Cards.findAll({
-          where: { done: true },
+          where: { done: true, userId },
           raw: true,
           order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
         });
@@ -33,7 +35,7 @@ router.get('/',verifyToken , async (req, res) => {
       }
       case 'undone': {
         const card = await models.Cards.findAll({
-          where: { done: false },
+          where: { done: false, userId },
           raw: true,
           order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
         });
