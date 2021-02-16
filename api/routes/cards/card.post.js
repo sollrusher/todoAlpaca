@@ -11,14 +11,16 @@ ServerError.prototype.constructor = ServerError;
 
 router.post('/newcard',verifyToken, async (req, res) => {
   try {
-    if (!req.body.title) {
+    if (!req.body.title ) {
       throw new ServerError('Empty fields', 400);
     }
     const { title } = req.body;
+    const { userId } = req
 
     const card = await models.Cards.create({
       title,
       done: false,
+      userId,
     });
     const { id, createdAt, done } = card;
     return res.json({ cards: { id, title, createdAt, done } });
