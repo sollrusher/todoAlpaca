@@ -50,8 +50,7 @@ export default class TodoList extends Component {
       const newTodo = await api.post('/newcard', { title: this.state.newCard });
       if (this.state.cards) {
         const oldArr = this.state.cards;
-
-        oldArr.push(newTodo.data.cards);
+        oldArr.push(newTodo.data);
         this.setState({
           ...this.state,
           ...{
@@ -191,7 +190,7 @@ export default class TodoList extends Component {
       todos = this.state.cards.map((element) => {
         return (
           <TodoItem
-            id={element.id}
+            key={element.id}
             title={element.title}
             done={element.done}
             createdAt={element.createdAt}
