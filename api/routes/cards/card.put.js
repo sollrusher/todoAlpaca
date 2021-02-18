@@ -1,4 +1,5 @@
 const express = require('express');
+const validator = require('../../middlewares/validator');
 const verifyToken = require('../../middlewares/verify-JWT');
 
 const router = express.Router();
@@ -8,7 +9,7 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.put('/', verifyToken, async (req, res) => {
+router.put('/', validator, verifyToken, async (req, res) => {
   try {
     const { id } = req.body;
     if (!id) throw new ServerError('Empty fields', 400);
