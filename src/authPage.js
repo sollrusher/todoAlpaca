@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './authPage.css';
 import { onLogin } from './utils/get-user';
+import { loginUser } from './store/action/action';
 
-export default class Auth extends Component {
+const mapDispatchToProps = {
+  loginUser,
+};
+
+class Auth extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,9 +28,11 @@ export default class Auth extends Component {
   };
 
   handleSubmit = async (event) => {
+    const { loginUser } = this.props;
     if (event.key == 'Enter' && this.state.login !== '') {
       const { login, password } = this.state;
-      onLogin(login, password);
+      await onLogin(login, password);
+      loginUser(login, password);
     }
   };
 
@@ -58,3 +66,5 @@ export default class Auth extends Component {
     );
   }
 }
+
+export default connect(null, mapDispatchToProps)(Auth);
