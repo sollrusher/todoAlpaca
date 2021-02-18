@@ -32,12 +32,11 @@ const login = (state = getInitialState(), action) => {
           ...state.user,
           login: action.login,
         },
-        initialized: token ? true : false,
+        initialized: true,
       };
     case INIT_USER: {
       getUser().then((user) => {
         const { login } = user;
-        console.log(login);
         store.dispatch(loginUser(login));
       });
       return state;
