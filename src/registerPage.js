@@ -3,6 +3,7 @@ import './registerPage.css';
 import { register } from './utils/get-user';
 import { connect } from 'react-redux';
 import { loginUser } from './store/action/action';
+import { Link } from 'react-router-dom';
 
 const mapDispatchToProps = {
   loginUser,
@@ -61,6 +62,9 @@ class Register extends Component {
               onKeyPress={this.handleSubmit}
             />
           </p>
+        </div>
+        <div>
+          <Link to="/">Уже зарегистрированы ?</Link>
         </div>
       </section>
     );
