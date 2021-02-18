@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import './registerPage.css';
 import { register } from './utils/get-user';
+import { connect } from 'react-redux';
+import { loginUser } from './store/action/action';
 
-export default class Register extends Component {
+const mapDispatchToProps = {
+  loginUser,
+};
+
+class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,16 +21,18 @@ export default class Register extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
+    if(value.length > 10) return
     this.setState({
       [name]: value,
     });
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
+    const { loginUser } = this.props;
     if (event.key == 'Enter' && this.state.login !== '') {
       const { login, password } = this.state;
-      register(login, password);
+      await register(login, password);
+      loginUser(login, password);
     }
   };
 
@@ -58,3 +66,5 @@ export default class Register extends Component {
     );
   }
 }
+
+export default connect(null, mapDispatchToProps)(Register);
