@@ -3,6 +3,7 @@ import { Component } from 'react';
 import './todoList.css';
 import TodoItem from './todo-item';
 import api from './utils/api';
+import { getUser } from './utils/get-user';
 
 export default class TodoList extends Component {
   constructor(props) {
@@ -14,15 +15,17 @@ export default class TodoList extends Component {
       editCard: '',
       filter: 'all',
       chrono: false,
+      userId: '',
+      login: '',
     };
   }
   async componentDidMount() {
     try {
+      this.getUserByToken();
       let cards = await api.get('/', {
         params: { filter: this.state.filter, chrono: this.state.chrono },
       });
       if (!cards) throw new Error('Todo list is empty');
-      console.log(cards);
 
       this.setState({
         ...this.state,
@@ -90,7 +93,7 @@ export default class TodoList extends Component {
       },
     });
 
-    api.put('/toggledone', { id });
+    api.put('/', { id });
   };
 
   toggleEdit = (id, title) => {
@@ -103,7 +106,7 @@ export default class TodoList extends Component {
     if (event.key == 'Enter' && this.state.editCard !== '') {
       const value = this.state.editCard;
       const id = this.state.editId;
-      await api.put('/renamecard', { id, title: value });
+      await api.put('/', { id, title: value });
       this.setState({ edittable: !this.state.edittable });
 
       try {
@@ -174,8 +177,15 @@ export default class TodoList extends Component {
     }
   };
 
+  getUserByToken  = async () => {
+    const user = await getUser()
+    const { login, id } = user;
+    this.setState({login: login})
+    this.setState({userId: id})
+  }
+
   render() {
-    const name = 'Данила';
+    const name = this.state.login;
     console.log('gagagagagag - ', this.state);
     let todos;
     if (this.state.cards) {
