@@ -9,3 +9,8 @@ export async function onLogin(login, password) {
   const token = await api.post('/login', { login, password });
   localStorage.setItem('token', JSON.stringify(token.data.token));
 }
+
+export async function getUser(){
+  const user = await api.get('/getuser');
+  return user.data
+}
