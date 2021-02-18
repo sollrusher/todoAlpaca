@@ -8,42 +8,21 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.put('/',verifyToken , async (req, res) => {
+router.put('/', verifyToken, async (req, res) => {
   try {
-    if (!req.body.id) {
-      throw new ServerError('Empty fields', 400);
-    }
+    const { id } = req.body;
+    if (!id) throw new ServerError('Empty fields', 400);
+  
+    const oldCard = await models.Cards.findOne({ where: { id } });
+    if (!oldCard) throw new ServerError('Card not found', 404);
 
-    const { id, title } = req.body;
+    const card = {...oldCard.dataValues, ...req.body}
 
-    const card = await models.Cards.findOne({ where: { id } });
-    if (!card) {
-      throw new ServerError('Card not found', 404);
-    }
-
-    if (title) {
-      await models.Cards.update(
-        {
-          title,
-        },
-        {
-          where: { id },
-        },
-      );
-
-      const { createdAt, done } = card;
-
-      res.json({ id: id, title: title, createdAt, done });
-    } else {
-      const { done } = card;
-
-      await models.Cards.update(
-        {
-          done: !done,
-        },
-        { where: { id } },
-      );
-    }
+    await models.Cards.update(
+      card,
+      { where: { id } },
+    );
+      res.send(card)
   } catch (error) {
     return res.status(error.status).json(error.message);
   }

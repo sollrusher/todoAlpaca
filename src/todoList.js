@@ -83,6 +83,8 @@ export default class TodoList extends Component {
     const newArr = this.state.cards.filter((item) => {
       if (item.id == id) {
         item.done = !item.done;
+        const {done} = item
+        api.put('/', { id, done});
       }
       return item;
     });
@@ -92,8 +94,6 @@ export default class TodoList extends Component {
         cards: newArr,
       },
     });
-
-    api.put('/', { id });
   };
 
   toggleEdit = (id, title) => {
@@ -186,7 +186,6 @@ export default class TodoList extends Component {
 
   render() {
     const name = this.state.login;
-    console.log('gagagagagag - ', this.state);
     let todos;
     if (this.state.cards) {
       todos = this.state.cards.map((element) => {
