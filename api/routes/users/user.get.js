@@ -14,7 +14,7 @@ router.get('/getuser', verifyToken , async (req, res) => {
       where: { id: req.userId },
     });
     const { login } = user;
-    res.json({ login });
+    res.json({ login, id: req.userId });
   } catch (error) {
     return res.status(error.status).json(error.message);
   }
