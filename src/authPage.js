@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import './authPage.css';
 import { onLogin } from './utils/get-user';
 import { loginUser } from './store/action/action';
+import { Link } from 'react-router-dom';
 
 const mapDispatchToProps = {
   loginUser,
@@ -21,7 +22,7 @@ class Auth extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
+    if(value.length > 10) return
     this.setState({
       [name]: value,
     });
@@ -61,7 +62,9 @@ class Auth extends Component {
             />
           </p>
         </div>
-        <div className="auth__buttons"></div>
+        <div className="auth__buttons">
+          <Link to="/register">Регистрация</Link>
+        </div>
       </section>
     );
   }
