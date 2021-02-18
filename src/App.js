@@ -1,17 +1,27 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React, { Component } from "react";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 
 import Auth from "./authPage";
 import "./app.css";
 import Register from "./registerPage";
 import TodoList from "./todoList";
+import PrivateRoute from './utils/privateRoute';
+import { connect } from "react-redux";
 
-function App() {
-  const token = localStorage.getItem('token');
+const mapStateToProps = (store) => ({
+  initialized: store.initialized,
+  store,
+});
+
+const connector = connect(mapStateToProps);
+
+function App(props) {
+  const { initialized } = props;
+
+  console.log(initialized);
   
   return (
-
-    <Router className="app">
+    <Router >
       <ul>
         <li>
           <Link to="/">Войти</Link>
@@ -24,20 +34,20 @@ function App() {
         </li>
       </ul>
       <div className="app">
-        <Switch>
+        <Switch >
           <Route exact path="/">
-            <Auth />
+            {initialized ? <Redirect to="/todolist" /> : <Auth />}
           </Route>
           <Route path="/register">
-            <Register />
+          {initialized ? <Redirect to="/todolist" /> : <Register/>}
           </Route>
-          <Route path="/todolist">
-            <TodoList />
-          </Route>
+          <PrivateRoute path="/todolist" auth={initialized}>
+            <TodoList/>
+          </PrivateRoute>
         </Switch>
-      </div>
+        </div>
     </Router>
   );
 }
 
-export default App;
+export default connector(App);
