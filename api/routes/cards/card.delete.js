@@ -21,8 +21,7 @@ router.delete('/',verifyToken , async (req, res) => {
       throw new ServerError('Card not found', 404);
     }
     models.Cards.destroy({ where: { id } });
-    const { title } = card;
-    res.json({ id: id, title: title, });
+    res.json({ id });
   } catch (error) {
     return res.status(error.status).json(error.message);
   }
