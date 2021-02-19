@@ -28,7 +28,7 @@ li{
   transform: rotate(-45deg);
 }
 
-p{
+div{
   user-select: none;
 }
 
