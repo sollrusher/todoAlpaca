@@ -30,7 +30,7 @@ export default class TodoList extends Component {
   async componentDidMount() {
     try {
       this.getUserByToken();
-      let cards = await api.get('/', {
+      let cards = await api.get('/get', {
         params: { filter: this.state.filter, chrono: this.state.chrono },
       });
       if (!cards) throw new Error('Todo list is empty');
@@ -96,7 +96,7 @@ export default class TodoList extends Component {
       },
     });
 
-    api.delete('/', { params: { id: id } });
+    api.delete('/delete', { params: { id: id } });
   };
 
   onToggleDone = (id) => {
@@ -104,7 +104,7 @@ export default class TodoList extends Component {
       if (item.id == id) {
         item.done = !item.done;
         const { done, title } = item;
-        api.put('/', { id, done, title });
+        api.put('/put', { id, done, title });
       }
       return item;
     });
@@ -130,12 +130,12 @@ export default class TodoList extends Component {
     ) {
       const value = this.state.editCard;
       const id = this.state.editId;
-      await api.put('/', { id, title: value });
+      await api.put('/put', { id, title: value });
       this.setState({ editId: '' });
 
       try {
         //not the best solution
-        let cards = await api.get('/', {
+        let cards = await api.get('/get', {
           params: { filter: this.state.filter, chrono: this.state.chrono },
         });
         if (!cards) throw new Error('Todo list is empty');
@@ -159,7 +159,7 @@ export default class TodoList extends Component {
 
     try {
       //not the best solution
-      let cards = await api.get('/', {
+      let cards = await api.get('/get', {
         params: { filter: value, chrono: this.state.chrono },
       });
       if (!cards) throw new Error('Todo list is empty');
@@ -181,7 +181,7 @@ export default class TodoList extends Component {
     try {
       //not the best solution
 
-      let cards = await api.get('/', {
+      let cards = await api.get('/get', {
         params: { filter: this.state.filter, chrono: reverseChrono },
       });
       if (!cards) throw new Error('Todo list is empty');

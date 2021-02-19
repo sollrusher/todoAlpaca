@@ -8,7 +8,6 @@ const path = require('path');
 
 
 const app = express();
-
 const sequelize = new Sequelize(
   process.env.dbName,
   process.env.user,
@@ -43,6 +42,13 @@ async function useControllers() {
 }
 useControllers();
 
-app.listen(5000, () => {
+app.use(express.static(path.join(__dirname, "..", "build")));
+app.use('/static', express.static("public"));
+
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+});
+
+app.listen(process.env.PORT||5000, () => {
   console.log('Сервер ожидает подключения...');
 });

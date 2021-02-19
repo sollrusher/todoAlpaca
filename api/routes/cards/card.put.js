@@ -9,7 +9,7 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.put('/',body('title', 'Invalid Title').isLength({min:1, max:20}), verifyToken, async (req, res) => {
+router.put('/put',body('title', 'Invalid Title').isLength({min:1, max:20}), verifyToken, async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

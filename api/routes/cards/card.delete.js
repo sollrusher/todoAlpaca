@@ -9,7 +9,7 @@ ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
 
-router.delete('/',verifyToken , async (req, res) => {
+router.delete('/delete',verifyToken , async (req, res) => {
   try {
     if (!req.query.id) {
       throw new ServerError('Empty fields', 400);

@@ -8,7 +8,7 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.get('/', verifyToken, async (req, res) => {
+router.get('/get', verifyToken, async (req, res) => {
   try {
     const { userId } = req;
 
