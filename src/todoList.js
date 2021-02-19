@@ -61,7 +61,7 @@ export default class TodoList extends Component {
       this.state.newCard[0] !== ' ' &&
       this.state.newCard.length < 20
     ) {
-      const newTodo = await api.post('/newcard', { title: this.state.newCard });
+      const newTodo = await api.post('/card', { title: this.state.newCard });
       if (this.state.cards) {
         const oldArr = this.state.cards;
         oldArr.push(newTodo.data);

@@ -11,6 +11,6 @@ export async function onLogin(login, password) {
 }
 
 export async function getUser(){
-  const user = await api.get('/getuser');
+  const user = await api.get('/user');
   return user.data
 }
