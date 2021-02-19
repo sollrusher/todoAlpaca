@@ -8,7 +8,7 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.get('/getuser', verifyToken , async (req, res) => {
+router.get('/user', verifyToken , async (req, res) => {
   try {
     const user = await models.User.findOne({
       where: { id: req.userId },
