@@ -5,7 +5,6 @@ import reducer from './reducer/reducer';
 import { initUser } from './action/action';
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
-console.log(store.getState());
 if (store.getState().initialized) {
   store.dispatch(initUser());
 }

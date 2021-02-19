@@ -24,7 +24,6 @@ const getInitialState = () => {
 const login = (state = getInitialState(), action) => {
   switch (action.type) {
     case LOGIN_USER:
-      console.log(state);
       return {
         ...state,
         user: {
