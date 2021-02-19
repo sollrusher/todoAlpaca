@@ -22,7 +22,8 @@ class Auth extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    if(value.length > 10) return
+    
+    if(/ /g.test(value) || value.length > 10) return
     this.setState({
       [name]: value,
     });
@@ -30,7 +31,13 @@ class Auth extends Component {
 
   handleSubmit = async (event) => {
     const { loginUser } = this.props;
-    if (event.key == 'Enter' && this.state.login !== '') {
+    if (
+      event.key == 'Enter' &&
+      this.state.login !== '' &&
+      this.state.login.length < 20 &&
+      this.state.password !== '' &&
+      this.state.password.length < 20
+    ) {
       const { login, password } = this.state;
       await onLogin(login, password);
       loginUser(login, password);
