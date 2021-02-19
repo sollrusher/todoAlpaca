@@ -1,5 +1,6 @@
 const express = require('express');
-const validator = require('../../middlewares/validator');
+const { body, validationResult } = require('express-validator');
+
 const verifyToken = require('../../middlewares/verify-JWT');
 
 const router = express.Router();
@@ -10,8 +11,13 @@ ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
 
-router.post('/newcard', validator, verifyToken, async (req, res) => {
+router.post('/card', body('title', 'Invalid Title').isLength({min:1, max:20}), verifyToken, async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     if (!req.body.title ) {
       throw new ServerError('Empty fields', 400);
     }
