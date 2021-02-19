@@ -40,13 +40,11 @@ export default class TodoList extends Component {
 
   handleChange = (event) => {
     const name = event.target.name;
-    if (this.state[name].length < 25)
-      this.setState({ [name]: event.target.value });
-    else return;
+    this.setState({ [name]: event.target.value });
   };
 
   handleSubmit = async (event) => {
-    if (event.key == 'Enter' && this.state.newCard !== '') {
+    if (event.key == 'Enter' && this.state.newCard !== '' && this.state.newCard[0] !== ' ' && this.state.newCard.length < 20) {
       const newTodo = await api.post('/newcard', { title: this.state.newCard });
       if (this.state.cards) {
         const oldArr = this.state.cards;
@@ -102,7 +100,7 @@ export default class TodoList extends Component {
   };
 
   handleEditSubmit = async (event) => {
-    if (event.key == 'Enter' && this.state.editCard !== '') {
+    if (event.key == 'Enter' && this.state.newCard !== '' && this.state.newCard[0] !== ' ' && this.state.newCard.length < 20) {
       const value = this.state.editCard;
       const id = this.state.editId;
       await api.put('/', { id, title: value });
@@ -114,7 +112,6 @@ export default class TodoList extends Component {
           params: { filter: this.state.filter, chrono: this.state.chrono },
         });
         if (!cards) throw new Error('Todo list is empty');
-        console.log(cards.data.cards);
 
         this.setState({
           ...this.state,
@@ -140,8 +137,6 @@ export default class TodoList extends Component {
         params: { filter: value, chrono: this.state.chrono },
       });
       if (!cards) throw new Error('Todo list is empty');
-      console.log(cards.data.cards);
-
       this.setState({
         ...this.state,
         ...{
