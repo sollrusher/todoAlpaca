@@ -19,6 +19,14 @@ export default class TodoList extends Component {
       login: '',
     };
   }
+
+  escListener = (event) =>{
+    if (event.key === 'Escape') {
+      this.setState({ editId: '', editCard: '' });
+      return;
+    }
+  }
+
   async componentDidMount() {
     try {
       this.getUserByToken();
@@ -36,17 +44,16 @@ export default class TodoList extends Component {
 
       document.addEventListener(
         'keydown',
-        (event) => {
-          if (event.key === 'Escape') {
-            this.setState({ editId: '', editCard: '' });
-            return;
-          }
-        },
+        this.escListener,
         false
       );
     } catch (error) {
       console.log(error);
     }
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener("keydown", this.escListener, false);
   }
 
   handleChange = (event) => {
@@ -96,8 +103,8 @@ export default class TodoList extends Component {
     const newArr = this.state.cards.filter((item) => {
       if (item.id == id) {
         item.done = !item.done;
-        const { done } = item;
-        api.put('/', { id, done });
+        const { done, title } = item;
+        api.put('/', { id, done, title });
       }
       return item;
     });
