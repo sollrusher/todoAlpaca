@@ -8,45 +8,25 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.get('/',verifyToken , async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
     const { userId } = req;
-    const chrono = req.query.chrono;
-    if (!req.query.filter) throw new ServerError('Filter was missing', 400);
 
-    switch (req.query.filter) {
-      case 'all': {
-        const card = await models.Cards.findAll({
-          where: { userId },
-          raw: true,
-          order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
-        });
-        res.json({ cards: card });
-        break;
-      }
-      case 'done': {
-        const card = await models.Cards.findAll({
-          where: { done: true, userId },
-          raw: true,
-          order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
-        });
-        res.json({ cards: card });
-        break;
-      }
-      case 'undone': {
-        const card = await models.Cards.findAll({
-          where: { done: false, userId },
-          raw: true,
-          order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
-        });
-        res.json({ cards: card });
-        break;
-      }
+    const filter = {
+      where: {
+        userId,
+      },
+      raw: true,
+      order:
+        req.query.chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
+    };
 
-      default: {
-        throw new ServerError('Filter is wrong', 400);
-      }
-    }
+    if (req.query.filter === 'done') filter.where.done = true;
+    if (req.query.filter === 'undone') filter.where.done = false;
+
+    const card = await models.Cards.findAll(filter);
+
+    res.json({ cards: card });
   } catch (error) {
     return res.status(error.status).json(error.message);
   }
