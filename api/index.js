@@ -6,11 +6,13 @@ const bodyParser = require('body-parser');
 const klawSync = require('klaw-sync');
 const path = require('path');
 const pg = require('pg');
+const config = require('./config/config');
 pg.defaults.ssl = true;
 
+console.log(111111111111111, config);
 
 const app = express();
-const sequelize = new Sequelize(process.env.DATABASE_URL,
+const sequelize = new Sequelize(config.production.DATABASE_URL,
   {
     dialect: 'postgres',
     ssl: true,
