@@ -8,13 +8,9 @@ const path = require('path');
 
 
 const app = express();
-const sequelize = new Sequelize(
-  process.env.dbName,
-  process.env.user,
-  process.env.password,
+const sequelize = new Sequelize(process.env.DATABASE_URL,
   {
-    dialect: process.env.dialect,
-    host: process.env.host,
+    dialect: 'postgres',
   }
 );
 
