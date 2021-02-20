@@ -5,6 +5,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const klawSync = require('klaw-sync');
 const path = require('path');
+const pg = require('pg');
+pg.defaults.ssl = true;
 
 
 const app = express();
