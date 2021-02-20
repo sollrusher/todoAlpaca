@@ -13,7 +13,10 @@ const app = express();
 const sequelize = new Sequelize(process.env.DATABASE_URL,
   {
     dialect: 'postgres',
-    ssl: true
+    ssl: true,
+    dialectOptions: {
+      ssl: true
+  },
   }
 );
 
