@@ -1,2 +1,2 @@
-web: db:migrate
+release: db:migrate
 web: npm start
