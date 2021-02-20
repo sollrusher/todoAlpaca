@@ -45,6 +45,7 @@ class Auth extends Component {
   };
 
   render() {
+    console.log(process.env.DATABASE_URL)
     return (
       <section className="auth">
         <div className="auth__inputs">
