@@ -6,7 +6,6 @@ module.exports = {
       database: "todo",
       host: "127.0.0.1",
       dialect: "postgres",
-      DATABASE_URL: process.env.DATABASE_URL,      
     },
     test: {
       username: "danila",

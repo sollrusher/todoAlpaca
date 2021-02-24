@@ -5,22 +5,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const klawSync = require('klaw-sync');
 const path = require('path');
-const pg = require('pg');
 const config = require('./config/config');
-pg.defaults.ssl = true;
+
 
 console.log(111111111111111, config);
 
 const app = express();
-const sequelize = new Sequelize(config.production.DATABASE_URL,
-  {
-    dialect: 'postgres',
-    ssl: true,
-    dialectOptions: {
-      ssl: true
-  },
-  }
-);
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const jsonParser = bodyParser.json({ extended: false });
