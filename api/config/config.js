@@ -16,6 +16,6 @@ module.exports = {
       DATABASE_URL: process.env.DATABASE_URL,      
     },
     production: {
-      DATABASE_URL: process.env.DATABASE_URL,            
+      use_env_variable: DATABASE_URL,        
     }
   }
