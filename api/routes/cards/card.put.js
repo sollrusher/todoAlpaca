@@ -18,15 +18,17 @@ router.put('/put',body('title', 'Invalid Title').isLength({min:1, max:20}), veri
 
     const { id } = req.body;
     if (!id) throw new ServerError('Empty fields', 400);
+
+    const { userId } = req;
   
-    const oldCard = await models.Cards.findOne({ where: { id } });
+    const oldCard = await models.Cards.findOne({ where: { id, userId } });
     if (!oldCard) throw new ServerError('Card not found', 404);
 
     const card = {...oldCard.dataValues, ...req.body}
 
     await models.Cards.update(
       card,
-      { where: { id } },
+      { where: { id, userId } },
     );
       res.send(card)
   } catch (error) {

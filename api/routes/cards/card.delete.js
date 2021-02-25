@@ -17,7 +17,9 @@ router.delete('/delete',verifyToken , async (req, res) => {
       throw new ServerError('Field "ID" is missing', 400);
     }
 
-   const card = await models.Cards.destroy({ where: { id } });
+    const { userId } = req;
+
+   const card = await models.Cards.destroy({ where: { id, userId } });
    if(card === 0) throw new ServerError('Card not found', 404);
     
     res.json({ id });
