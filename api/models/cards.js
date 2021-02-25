@@ -14,8 +14,19 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Cards.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     title: DataTypes.STRING,
-    done: DataTypes.BOOLEAN,
+    done: {
+     type: DataTypes.BOOLEAN,
+     set(value) {
+      this.setDataValue('done', value=false);
+    },
+    },
     userId: DataTypes.INTEGER
   }, {
     sequelize,

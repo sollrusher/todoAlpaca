@@ -7,17 +7,18 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 // const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
-var config = require('config').db;
+var dBconfig = require('config').db;
 console.log(1111111111111111111111, process.env.NODE_ENV);
 // console.log('sadasdassds', config.db)
-console.log('sadasdaimsosadssds', config)
+console.log('sadasdaimsosadssds', dBconfig)
 
 // console.log('ENVENVENV', env)
 // console.log(process.env[config.use_env_variable]);
 
+
 let sequelize;
 
-sequelize = new Sequelize((config.use_env_variable, config) || config);
+sequelize = new Sequelize(dBconfig.databaseUrl);
 
   async function AuthSeqCheck() {
     try {
