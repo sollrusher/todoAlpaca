@@ -28,7 +28,7 @@ router.get('/get', verifyToken, async (req, res) => {
 
     res.json({ cards: card });
   } catch (error) {
-    return res.status(error.status).json(error.message);
+    return res.status(error.status || 400).json(error.message);
   }
 });
 

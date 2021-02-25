@@ -30,7 +30,7 @@ router.put('/put',body('title', 'Invalid Title').isLength({min:1, max:20}), veri
     );
       res.send(card)
   } catch (error) {
-    return res.status(error.status).json(error.message);
+    return res.status(error.status || 400).json(error.message);
   }
 });
 

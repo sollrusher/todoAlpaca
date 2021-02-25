@@ -23,7 +23,7 @@ router.post('/signup', async (req, res) => {
     const token = signJwt(id);
     return res.json({ token });
   } catch (error) {
-    return res.status(error.status).json(error.message);
+    return res.status(error.status || 400).json(error.message);
   }
 });
 
