@@ -11,14 +11,13 @@ function verifyToken(req, res, next) {
       throw new ServerError('Token missing', 400);
 
     const bearerToken = bearerHeader.split(' ')[1];
-    req.token = bearerToken;
-    return jwt.verify(bearerToken, process.env.secretJwt, (err, decodec) => {
-      if (err) throw new ServerError('Wrong token', 400);
-      req.userId = decodec.userId;
-      return next();
-    });
+    const tokenData = jwt.verify(bearerToken, process.env.secretJwt)
+    req.userId = tokenData.userId;
+    console.log(req.userId) 
+    next()
+    
   } catch (error) {
-    return res.status(error.status).json(error.message);
+    return res.status(401).json(error.message);
   }
 }
 
