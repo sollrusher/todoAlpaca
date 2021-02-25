@@ -23,9 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     done: {
      type: DataTypes.BOOLEAN,
-     set(value) {
-      this.setDataValue('done', value=false);
-    },
+     allowNull: false, 
+     defaultValue: false,
     },
     userId: DataTypes.INTEGER
   }, {

@@ -26,7 +26,6 @@ router.post('/card', body('title', 'Invalid Title').isLength({min:1, max:20}), v
 
     const card = await models.Cards.create({
       title,
-      done: false,
       userId,
     });
     
