@@ -17,7 +17,7 @@ console.log('sadasdaimsosadssds', dBconfig)
 
 let sequelize;
 
-sequelize = new Sequelize(dBconfig.databaseUrl);
+sequelize = new Sequelize(dBconfig.databaseUrl, dBconfig);
 
   async function AuthSeqCheck() {
     try {
