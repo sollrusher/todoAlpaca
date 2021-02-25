@@ -14,7 +14,7 @@ console.log('sadasdassds', config)
 
 // console.log('ENVENVENV', env)
 
-  const sequelize = new Sequelize(config.database, config.username, config.password, config);
+  const sequelize = new Sequelize(config);
 
   async function gaga() {
     try {
