@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start-client": "react-scripts start",
-    "start": "cd api && sequelize db:migrate && node index",
+    "start": "cd api && node index",
     "start-dev": "cd api && nodemon index",
     "build": "react-scripts build",
     "test": "react-scripts test",
