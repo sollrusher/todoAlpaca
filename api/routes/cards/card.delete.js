@@ -14,14 +14,12 @@ router.delete('/delete',verifyToken , async (req, res) => {
     const id = req.query.id ;
     
     if (!id) {
-      throw new ServerError('Empty fields', 400);
+      throw new ServerError('Field "ID" is missing', 400);
     }
+
+   const card = await models.Cards.destroy({ where: { id } });
+   if(card === 0) throw new ServerError('Card not found', 404);
     
-    const card = await models.Cards.findOne({ where: { id } });
-    if (!card) {
-      throw new ServerError('Card not found', 404);
-    }
-    models.Cards.destroy({ where: { id } });
     res.json({ id });
   } catch (error) {
     return res.status(error.status || 400).json(error.message);
