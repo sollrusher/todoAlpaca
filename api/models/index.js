@@ -10,18 +10,16 @@ const db = {};
 var config = require('config').db;
 console.log(1111111111111111111111, process.env.NODE_ENV);
 // console.log('sadasdassds', config.db)
-console.log('sadasdassds', config)
+console.log('sadasdaimsosadssds', config)
 
 // console.log('ENVENVENV', env)
 // console.log(process.env[config.use_env_variable]);
 
 let sequelize;
 
-sequelize = new Sequelize(config);
+sequelize = new Sequelize((config.use_env_variable, config) || config);
 
-
-
-  async function gaga() {
+  async function AuthSeqCheck() {
     try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
@@ -29,7 +27,7 @@ sequelize = new Sequelize(config);
     console.error('Unable to connect to the database:', error);
   }
   }
-  gaga()
+  AuthSeqCheck()
 
 fs
   .readdirSync(__dirname)
