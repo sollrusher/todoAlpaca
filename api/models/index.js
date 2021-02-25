@@ -16,6 +16,16 @@ console.log('sadasdassds', config)
 
   const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
+  async function gaga() {
+    try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+  }
+  gaga()
+
 fs
   .readdirSync(__dirname)
   .filter(file => {
