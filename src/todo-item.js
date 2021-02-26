@@ -1,8 +1,10 @@
 import { React } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import './todo-item.css';
 
 export default function TodoItem({
   id,
+  index,
   title,
   done,
   createdAt,
@@ -35,7 +37,13 @@ export default function TodoItem({
   );
 
   return (
-    <li>
+    <Draggable draggableId={id} index={index}>
+      {provided => (
+    <li
+    {...provided.draggableProps}
+    {...provided.dragHandleProps}
+    ref={provided.innerRef}
+    >
       <div className={done ? 'done' : ''} onDoubleClick={onToggle}>
         <span className="edit" onClick={toggleEdit}>
           &#10000;
@@ -45,5 +53,7 @@ export default function TodoItem({
         <p className="dateOfCreate">{dateOfCreate}</p>
       </div>
     </li>
+    )}
+    </Draggable>
   );
 }

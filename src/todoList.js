@@ -4,6 +4,7 @@ import './todoList.css';
 import TodoItem from './todo-item';
 import api from './utils/api';
 import { getUser } from './utils/get-user';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 export default class TodoList extends Component {
   constructor(props) {
@@ -204,15 +205,20 @@ export default class TodoList extends Component {
     this.setState({ userId: id });
   };
 
+  onDragEnd = () =>{
+    //TODO
+  }
+
   render() {
     const name = this.state.login;
     let todos;
     if (this.state.cards) {
-      todos = this.state.cards.map((element) => {
+      todos = this.state.cards.map((element, index) => {
         return (
           <TodoItem
             key={element.id}
             id={element.id}
+            index={index}
             title={element.title}
             done={element.done}
             createdAt={element.createdAt}
@@ -286,20 +292,21 @@ export default class TodoList extends Component {
           />
           <h2>Ваши запланированые дела: </h2>
         </section>
-
+<DragDropContext onDragEnd={this.onDragEnd}>
         <section className="main__list">
-          <ul>{todos}</ul>
-        </section>
-        {/* <p className={hider}>
-          Поле для редактирования:{' '}
-          <input
-            name="editCard"
-            type="text"
-            value={this.state.editCard}
-            onChange={this.handleChange}
-            onKeyPress={this.handleEditSubmit}
-          />
-        </p> */}
+          <Droppable droppableId='1'>
+            {(provided) =>(
+              <ul 
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              >
+                {todos}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
+        </section> 
+        </DragDropContext>
       </section>
     );
   }
