@@ -1,5 +1,4 @@
 require('dotenv').config();
-const Sequelize = require('sequelize');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -7,16 +6,6 @@ const klawSync = require('klaw-sync');
 const path = require('path');
 
 const app = express();
-
-const sequelize = new Sequelize(
-  process.env.dbName,
-  process.env.user,
-  process.env.password,
-  {
-    dialect: process.env.dialect,
-    host: process.env.host,
-  }
-);
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const jsonParser = bodyParser.json({ extended: false });
@@ -26,7 +15,7 @@ app.use(urlencodedParser);
 app.use(jsonParser);
 
 async function useControllers() {
-  const paths = klawSync(`${__dirname}/routes/cards`, { nodir: true });
+  const paths = klawSync(`${__dirname}/routes`, { nodir: true });
   let controllersCount = 0;
   paths.forEach((file) => {
     if (
@@ -42,8 +31,13 @@ async function useControllers() {
 }
 useControllers();
 
+app.use(express.static(path.join(__dirname, "..", "build")));
+app.use('/static', express.static("public"));
 
-  app.listen(5000, () => {
-    console.log('Сервер ожидает подключения...');
-  });
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+});
 
+app.listen(process.env.PORT||5000, () => {
+  console.log('Сервер ожидает подключения...');
+});

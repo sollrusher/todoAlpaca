@@ -1,0 +1,21 @@
+.auth{
+    background-color: grey;
+    width: 300px;
+}
+.auth__inputs{
+    width: 97%;
+}
+.auth__inputs a{
+    
+}
+.auth__inputs input{
+    width: 100%;
+
+}
+.auth__buttons{
+    display: flex;
+    justify-content: space-around;
+}
+.auth__buttons button{
+
+}

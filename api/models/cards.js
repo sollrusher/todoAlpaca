@@ -14,8 +14,19 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Cards.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     title: DataTypes.STRING,
-    done: DataTypes.BOOLEAN
+    done: {
+     type: DataTypes.BOOLEAN,
+     allowNull: false, 
+     defaultValue: false,
+    },
+    userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Cards',

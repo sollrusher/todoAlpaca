@@ -1,4 +1,6 @@
 const express = require('express');
+const verifyToken = require('../../middlewares/verify-JWT');
+const { body, validationResult } = require('express-validator');
 
 const router = express.Router();
 const models = require('../../models');
@@ -7,44 +9,30 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.put('/', async (req, res) => {
+router.put('/put',body('title', 'Invalid Title').isLength({min:1, max:20}), verifyToken, async (req, res) => {
   try {
-    if (!req.body.id) {
-      throw new ServerError('Empty fields', 400);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    const { id, title } = req.body;
+    const { id } = req.body;
+    if (!id) throw new ServerError('Empty fields', 400);
 
-    const card = await models.Cards.findOne({ where: { id } });
-    if (!card) {
-      throw new ServerError('Card not found', 404);
-    }
-    console.log(title);
-    if (title) {
-      await models.Cards.update(
-        {
-          title,
-        },
-        {
-          where: { id },
-        },
-      );
+    const { userId } = req;
+  
+    const oldCard = await models.Cards.findOne({ where: { id, userId } });
+    if (!oldCard) throw new ServerError('Card not found', 404);
 
-      const { createdAt, done } = card;
+    const card = {...oldCard.dataValues, ...req.body}
 
-      res.json({ id: id, title: title, createdAt, done });
-    } else {
-      const { done } = card;
-
-      await models.Cards.update(
-        {
-          done: !done,
-        },
-        { where: { id } },
-      );
-    }
+    await models.Cards.update(
+      card,
+      { where: { id, userId } },
+    );
+      res.send(card)
   } catch (error) {
-    return res.status(error.status).json(error.message);
+    return res.status(error.status || 400).json(error.message);
   }
 });
 

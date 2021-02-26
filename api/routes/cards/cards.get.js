@@ -1,4 +1,5 @@
 const express = require('express');
+const verifyToken = require('../../middlewares/verify-JWT');
 
 const router = express.Router();
 const models = require('../../models');
@@ -7,46 +8,27 @@ const ServerError = require('../../utils/error-handler');
 ServerError.prototype = Object.create(Error.prototype);
 ServerError.prototype.constructor = ServerError;
 
-router.get('/', async (req, res) => {
-  const chrono = req.query.chrono;
-  console.log(req.query.chrono);
+router.get('/get', verifyToken, async (req, res) => {
   try {
-    if (!req.query.filter) throw new ServerError('Filter was missing', 400);
+    const { userId } = req;
 
-    switch (req.query.filter) {
-      case 'all': {
-        const card = await models.Cards.findAll({
-          raw: true,
-          order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
-        });
-        res.json({ cards: card });
-        break;
-      }
-      case 'done': {
-        const card = await models.Cards.findAll({
-          where: { done: true },
-          raw: true,
-          order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
-        });
-        res.json({ cards: card });
-        break;
-      }
-      case 'undone': {
-        const card = await models.Cards.findAll({
-          where: { done: false },
-          raw: true,
-          order: chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
-        });
-        res.json({ cards: card });
-        break;
-      }
+    const filter = {
+      where: {
+        userId,
+      },
+      raw: true,
+      order:
+        req.query.chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
+    };
 
-      default: {
-        throw new ServerError('Filter is wrong', 400);
-      }
-    }
+    if (req.query.filter === 'done') filter.where.done = true;
+    if (req.query.filter === 'undone') filter.where.done = false;
+
+    const card = await models.Cards.findAll(filter);
+
+    res.json({ cards: card });
   } catch (error) {
-    return res.status(error.status).json(error.message);
+    return res.status(error.status || 400).json(error.message);
   }
 });
 

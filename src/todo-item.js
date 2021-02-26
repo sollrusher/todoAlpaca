@@ -1,5 +1,5 @@
-import { React } from "react";
-import "./todo-item.css";
+import { React } from 'react';
+import './todo-item.css';
 
 export default function TodoItem({
   id,
@@ -9,27 +9,41 @@ export default function TodoItem({
   onDelete,
   onToggle,
   toggleEdit,
-  edittable
+  editCard,
+  editId,
+  handleChange,
+  handleEditSubmit,
 }) {
-  let linethrough;
-  done ? (linethrough = "done") : (linethrough = "");
+  let edittable = false;
+  if (id == editId) {
+    edittable = true;
+  }
 
-let block;
-edittable? block="item__edit" : block="block"
+  let dateOfCreate = createdAt;
 
-let dateOfCreate= createdAt;
+  const regex = /[TZ]/gm;
+  dateOfCreate = dateOfCreate.replace(regex, ' ');
 
-const regex = /[TZ]/gm
-dateOfCreate = dateOfCreate.replace(regex, ' ');
-
+  const inputEdit = (
+    <input
+      name="editCard"
+      type="text"
+      value={editCard}
+      onChange={handleChange}
+      onKeyPress={handleEditSubmit}
+    />
+  );
 
   return (
-    <li key={id}>
-      <p className={linethrough} onDoubleClick={onToggle}>
-        <span className="edit" onClick={toggleEdit}>&#10000;</span>
-        {title}
-        <span className="delete" onClick={onDelete} /><p className="dateOfCreate">{dateOfCreate}</p>
-      </p>
+    <li>
+      <div className={done ? 'done' : ''} onDoubleClick={onToggle}>
+        <span className="edit" onClick={toggleEdit}>
+          &#10000;
+        </span>
+        {edittable ? inputEdit : title}
+        <span className="delete" onClick={onDelete} />
+        <p className="dateOfCreate">{dateOfCreate}</p>
+      </div>
     </li>
   );
 }
