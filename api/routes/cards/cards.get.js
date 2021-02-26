@@ -12,14 +12,11 @@ router.get('/get', verifyToken, async (req, res) => {
   try {
     const { userId } = req;
 
-    let limit = 2;   // number of records per page
+    let limit = 6;
     let offset = 0;
 
-    const data  = await models.Cards.findAndCountAll({where: {userId}})
-
-      let page = req.query.currentPage;      // page number
-      let pages = Math.ceil(data.count / limit);
-      offset = limit * (page - 1);
+    let page = req.query.currentPage;
+    offset = limit * (page - 1);
 
     const filter = {
       where: {
@@ -29,11 +26,19 @@ router.get('/get', verifyToken, async (req, res) => {
       order:
         req.query.chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
       limit,
-      offset
+      offset,
     };
 
-    if (req.query.filter === 'done') filter.where.done = true;
-    if (req.query.filter === 'undone') filter.where.done = false;
+    if (req.query.filter === 'done') {
+      filter.where.done = true;
+    }
+    if (req.query.filter === 'undone') {
+      filter.where.done = false;
+    }
+
+    const cardsCount = await models.Cards.findAndCountAll(filter);
+
+    let pages = Math.ceil(cardsCount.count / limit);
 
     const cards = await models.Cards.findAll(filter);
 
