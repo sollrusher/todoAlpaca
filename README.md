@@ -16,3 +16,6 @@ in root of project, in terminal
 After create DB, project can be run in the root directory using the command
 
 ### `npm start`
+
+The working version is located on 
+### https://danila-todo.herokuapp.com/todolist
