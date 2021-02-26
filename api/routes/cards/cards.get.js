@@ -16,6 +16,7 @@ router.get('/get', verifyToken, async (req, res) => {
     let offset = 0;
 
     let page = req.query.currentPage;
+    if(!req.query.currentPage) throw new ServerError('Current page is missing', 400)
     offset = limit * (page - 1);
 
     const filter = {
@@ -44,7 +45,7 @@ router.get('/get', verifyToken, async (req, res) => {
 
     res.json({ cards, pages });
   } catch (error) {
-    return res.status(error.status || 400).json(error.message);
+    return res.status(error.status || 500).json(error.message);
   }
 });
 
