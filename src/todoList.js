@@ -17,6 +17,8 @@ export default class TodoList extends Component {
       chrono: false,
       userId: '',
       login: '',
+      pages: 0,
+      currentPage: 1,
     };
   }
 
@@ -30,8 +32,9 @@ export default class TodoList extends Component {
   async componentDidMount() {
     try {
       this.getUserByToken();
+      const { filter, chrono, currentPage } = this.state
       let cards = await api.get('/get', {
-        params: { filter: this.state.filter, chrono: this.state.chrono },
+        params: { filter, chrono, currentPage },
       });
       if (!cards) throw new Error('Todo list is empty');
 
@@ -40,8 +43,8 @@ export default class TodoList extends Component {
         ...{
           cards: cards.data.cards,
         },
+          pages: cards.data.pages
       });
-
       document.addEventListener(
         'keydown',
         this.escListener,
@@ -56,6 +59,32 @@ export default class TodoList extends Component {
     document.removeEventListener("keydown", this.escListener, false);
   }
 
+  getList = async({filter = this.state.filter, chrono = this.state.chrono, currentPage = this.state.currentPage}) =>{
+    try {
+      //not the best solution
+      let cards = await api.get('/get', {
+        params: { filter, chrono, currentPage },
+      });
+      if (!cards) throw new Error('Todo list is empty');
+
+      this.setState({
+        ...this.state,
+        ...{
+          cards: cards.data.cards,
+        },
+        pages: cards.data.pages
+      });
+
+      this.setState({
+        newCard: '',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
   handleChange = (event) => {
     const name = event.target.name;
     this.setState({ [name]: event.target.value });
@@ -69,19 +98,9 @@ export default class TodoList extends Component {
       this.state.newCard.length < 20
     ) {
       const newTodo = await api.post('/card', { title: this.state.newCard });
-      if (this.state.cards) {
-        const oldArr = this.state.cards;
-        oldArr.push(newTodo.data);
-        this.setState({
-          ...this.state,
-          ...{
-            cards: oldArr,
-          },
-        });
-        this.setState({
-          newCard: '',
-        });
-      }
+      
+      this.getList();
+    
     }
   };
 
@@ -133,45 +152,16 @@ export default class TodoList extends Component {
       await api.put('/put', { id, title: value });
       this.setState({ editId: '' });
 
-      try {
-        //not the best solution
-        let cards = await api.get('/get', {
-          params: { filter: this.state.filter, chrono: this.state.chrono },
-        });
-        if (!cards) throw new Error('Todo list is empty');
-
-        this.setState({
-          ...this.state,
-          ...{
-            cards: cards.data.cards,
-          },
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      this.getList();
     }
   };
 
   toggleFilter = async (event) => {
     const value = event.target.value;
 
-    this.setState({ filter: value });
+    this.setState({ filter: value, currentPage: 1 });
 
-    try {
-      //not the best solution
-      let cards = await api.get('/get', {
-        params: { filter: value, chrono: this.state.chrono },
-      });
-      if (!cards) throw new Error('Todo list is empty');
-      this.setState({
-        ...this.state,
-        ...{
-          cards: cards.data.cards,
-        },
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
+    this.getList({filter: value, currentPage: 1})
   };
 
   onChronoChange = async () => {
@@ -182,7 +172,7 @@ export default class TodoList extends Component {
       //not the best solution
 
       let cards = await api.get('/get', {
-        params: { filter: this.state.filter, chrono: reverseChrono },
+        params: { filter: this.state.filter, chrono: reverseChrono, currentPage: this.state.currentPage },
       });
       if (!cards) throw new Error('Todo list is empty');
 
@@ -204,8 +194,16 @@ export default class TodoList extends Component {
     this.setState({ userId: id });
   };
 
+  onChangePage = async (event) => {
+    this.setState({ currentPage: event.target.value })
+
+    this.getList({ currentPage: event.target.value })
+  }
+
   render() {
     const name = this.state.login;
+
+    console.log('currentPage - ', this.state.currentPage);
     let todos;
     if (this.state.cards) {
       todos = this.state.cards.map((element) => {
@@ -227,6 +225,13 @@ export default class TodoList extends Component {
         );
       });
     }
+
+    let buttonPages = [] ;
+    for (let i = 1; i <= this.state.pages; i++) {
+      buttonPages.push(<input type='button' value={i} onClick={this.onChangePage}></input>) 
+      
+    } 
+
     let hider;
     this.state.edittable ? (hider = '') : (hider = 'hide');
 
@@ -290,16 +295,9 @@ export default class TodoList extends Component {
         <section className="main__list">
           <ul>{todos}</ul>
         </section>
-        {/* <p className={hider}>
-          Поле для редактирования:{' '}
-          <input
-            name="editCard"
-            type="text"
-            value={this.state.editCard}
-            onChange={this.handleChange}
-            onKeyPress={this.handleEditSubmit}
-          />
-        </p> */}
+        <div>
+          {buttonPages}
+        </div>
       </section>
     );
   }
