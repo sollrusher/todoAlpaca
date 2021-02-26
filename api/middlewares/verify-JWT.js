@@ -13,7 +13,6 @@ function verifyToken(req, res, next) {
     const bearerToken = bearerHeader.split(' ')[1];
     const tokenData = jwt.verify(bearerToken, process.env.secretJwt)
     req.userId = tokenData.userId;
-    console.log(req.userId) 
     next()
     
   } catch (error) {

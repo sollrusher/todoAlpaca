@@ -8,12 +8,6 @@ const env = process.env.NODE_ENV || 'development';
 // const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 var dBconfig = require('config').db;
-console.log(1111111111111111111111, process.env.NODE_ENV);
-
-console.log('sadasdaimsosadssds', dBconfig)
-
-
-
 
 let sequelize;
 
