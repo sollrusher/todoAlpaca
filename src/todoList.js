@@ -205,8 +205,41 @@ export default class TodoList extends Component {
     this.setState({ userId: id });
   };
 
-  onDragEnd = () =>{
-    //TODO
+  onDragEnd = ( result ) =>{
+    const { destination, source, draggableId } = result;
+    console.log('ASD--asdsd-a----', this.state.cards)
+    console.log( 'destination - ', destination)
+
+    console.log( 'source - ', source)
+    console.log( 'draggableId - ', draggableId)
+
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    let oldArr = this.state.cards;
+    let temp= oldArr[source.index]
+    oldArr.splice(source.index, 1);
+ 
+    oldArr.splice(destination.index, 0, temp);
+
+
+    this.setState({
+      ...this.state,
+      ...{
+        cards: oldArr,
+      },
+    });
+
+
   }
 
   render() {
@@ -292,21 +325,16 @@ export default class TodoList extends Component {
           />
           <h2>Ваши запланированые дела: </h2>
         </section>
-<DragDropContext onDragEnd={this.onDragEnd}>
         <section className="main__list">
-          <Droppable droppableId='1'>
-            {(provided) =>(
-              <ul 
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              >
-                {todos}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </section> 
-        </DragDropContext>
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <Droppable droppableId={'column-1'}>
+          {provided => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>{todos}{provided.placeholder}</div>
+          )}
+          
+        </Droppable>
+      </DragDropContext>
+    </section>
       </section>
     );
   }

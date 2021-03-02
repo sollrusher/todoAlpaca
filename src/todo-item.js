@@ -37,7 +37,7 @@ export default function TodoItem({
   );
 
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={`${id}`} index={index}>
       {provided => (
     <li
     {...provided.draggableProps}
