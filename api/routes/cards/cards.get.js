@@ -18,7 +18,7 @@ router.get('/get', verifyToken, async (req, res) => {
       },
       raw: true,
       order:
-        req.query.chrono === 'true' ? [['createdAt', 'DESC']] : [['createdAt']],
+        req.query.chrono === 'true' ? [['index', 'DESC']] : [['index']],
     };
 
     if (req.query.filter === 'done') filter.where.done = true;
