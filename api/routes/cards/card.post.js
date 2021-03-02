@@ -21,11 +21,12 @@ router.post('/card', body('title', 'Invalid Title').isLength({min:1, max:20}), v
     if (!req.body.title ) {
       throw new ServerError('Empty fields', 400);
     }
-    const { title } = req.body;
+    const { title, index } = req.body;
     const { userId } = req
 
     const card = await models.Cards.create({
       title,
+      index,
       userId,
     });
     
