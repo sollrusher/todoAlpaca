@@ -21,12 +21,12 @@ export default class TodoList extends Component {
     };
   }
 
-  escListener = (event) =>{
+  escListener = (event) => {
     if (event.key === 'Escape') {
       this.setState({ editId: '', editCard: '' });
       return;
     }
-  }
+  };
 
   async componentDidMount() {
     try {
@@ -43,18 +43,14 @@ export default class TodoList extends Component {
         },
       });
 
-      document.addEventListener(
-        'keydown',
-        this.escListener,
-        false
-      );
+      document.addEventListener('keydown', this.escListener, false);
     } catch (error) {
       console.log(error);
     }
   }
 
-  componentWillUnmount(){
-    document.removeEventListener("keydown", this.escListener, false);
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.escListener, false);
   }
 
   handleChange = (event) => {
@@ -69,7 +65,7 @@ export default class TodoList extends Component {
       this.state.newCard[0] !== ' ' &&
       this.state.newCard.length < 20
     ) {
-      const newTodo = await api.post('/card', { title: this.state.newCard });
+      const newTodo = await api.post('/card', { title: this.state.newCard, index: this.state.cards.length });
       if (this.state.cards) {
         const oldArr = this.state.cards;
         oldArr.push(newTodo.data);
@@ -205,14 +201,8 @@ export default class TodoList extends Component {
     this.setState({ userId: id });
   };
 
-  onDragEnd = ( result ) =>{
+  onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-    console.log('ASD--asdsd-a----', this.state.cards)
-    console.log( 'destination - ', destination)
-
-    console.log( 'source - ', source)
-    console.log( 'draggableId - ', draggableId)
-
 
     if (!destination) {
       return;
@@ -226,11 +216,10 @@ export default class TodoList extends Component {
     }
 
     let oldArr = this.state.cards;
-    let temp= oldArr[source.index]
+    let item = oldArr[source.index];
     oldArr.splice(source.index, 1);
- 
-    oldArr.splice(destination.index, 0, temp);
 
+    oldArr.splice(destination.index, 0, item);
 
     this.setState({
       ...this.state,
@@ -239,8 +228,11 @@ export default class TodoList extends Component {
       },
     });
 
+    this.state.cards.forEach((element, index) => {
+      api.put('/put', { id: element.id, index });
+    });
 
-  }
+  };
 
   render() {
     const name = this.state.login;
@@ -282,28 +274,28 @@ export default class TodoList extends Component {
     }
 
     return (
-      <section className="main">
-        <section className="main__left">
+      <section className='main'>
+        <section className='main__left'>
           <input
-            type="button"
-            value="all"
+            type='button'
+            value='all'
             className={filter == 'all' ? 'green' : ''}
             onClick={this.toggleFilter}
           />
           <input
-            type="button"
-            value="done"
+            type='button'
+            value='done'
             className={filter == 'done' ? 'green' : ''}
             onClick={this.toggleFilter}
           />
           <input
-            type="button"
-            value="undone"
+            type='button'
+            value='undone'
             className={filter == 'undone' ? 'green' : ''}
             onClick={this.toggleFilter}
           />
         </section>
-        <section className="main__left-toggler" onClick={this.onChronoChange}>
+        <section className='main__left-toggler' onClick={this.onChronoChange}>
           <div className={`diver ${chronoDown}`}>
             <p>По хронологии</p>
           </div>
@@ -312,29 +304,31 @@ export default class TodoList extends Component {
           </div>
         </section>
 
-        <section className="main__head">
+        <section className='main__head'>
           <h1>Здравствуйте, {name}</h1>
           <input
-            name="newCard"
-            className="newItem"
-            type="textarea"
-            placeholder="Новое дело ?"
+            name='newCard'
+            className='newItem'
+            type='textarea'
+            placeholder='Новое дело ?'
             value={this.state.newCard}
             onChange={this.handleChange}
             onKeyPress={this.handleSubmit}
           />
           <h2>Ваши запланированые дела: </h2>
         </section>
-        <section className="main__list">
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId={'column-1'}>
-          {provided => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>{todos}{provided.placeholder}</div>
-          )}
-          
-        </Droppable>
-      </DragDropContext>
-    </section>
+        <section className='main__list'>
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            <Droppable droppableId={'column-1'}>
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {todos}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </section>
       </section>
     );
   }
