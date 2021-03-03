@@ -2,6 +2,21 @@ li{
     list-style-type: none
 }
 
+.task{
+  border: 1px solid lightgrey;
+  border-radius: 2px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: white;
+  width: 600px;
+}
+
+.task-title{
+  display: block;
+  border-bottom: 1px solid lightgrey;
+  text-align: center;
+}
+
 .delete {
   position: relative;
   top: 8px;
@@ -52,8 +67,8 @@ div{
 }
 
 .dateOfCreate{
-  display: inline;
-  margin-left: 40px;
+  display: block;
+  /* margin-left: 40px; */
   font-size: 0.4em;
   opacity: 0.5;
 }

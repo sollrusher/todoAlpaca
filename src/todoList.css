@@ -18,6 +18,11 @@
     font-size: 2em
 }
 
+.main__list {
+    display: flex;
+    width: 500px;
+}
+
 .main__list li{
    font-size: 2em;
    margin: 15px;
@@ -32,6 +37,7 @@
     flex-direction: column;
     position: absolute;
     left: 50px;
+    top: 300px;
 
 }
 .main__left input{

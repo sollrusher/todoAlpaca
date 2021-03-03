@@ -295,14 +295,14 @@ export default class TodoList extends Component {
             onClick={this.toggleFilter}
           />
         </section>
-        <section className='main__left-toggler' onClick={this.onChronoChange}>
+        {/* <section className='main__left-toggler' onClick={this.onChronoChange}>
           <div className={`diver ${chronoDown}`}>
             <p>По хронологии</p>
           </div>
           <div className={`diver ${chronoUp}`}>
             <p>В обратной хронологии</p>
           </div>
-        </section>
+        </section> */}
 
         <section className='main__head'>
           <h1>Здравствуйте, {name}</h1>

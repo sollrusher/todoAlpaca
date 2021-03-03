@@ -40,15 +40,17 @@ export default function TodoItem({
     <Draggable draggableId={`${id}`} index={index}>
       {provided => (
     <li
+    className='task'
     {...provided.draggableProps}
     {...provided.dragHandleProps}
     ref={provided.innerRef}
     >
       <div className={done ? 'done' : ''} onDoubleClick={onToggle}>
+        <span className='task-title' onClick={toggleEdit}>{edittable ? inputEdit : title}</span>
         <span className="edit" onClick={toggleEdit}>
           &#10000;
         </span>
-        {edittable ? inputEdit : title}
+        text
         <span className="delete" onClick={onDelete} />
         <p className="dateOfCreate">{dateOfCreate}</p>
       </div>
