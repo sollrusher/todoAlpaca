@@ -5,6 +5,7 @@ import TodoItem from './todo-item';
 import api from './utils/api';
 import { getUser } from './utils/get-user';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import Modal from './components/modal/modal';
 
 export default class TodoList extends Component {
   constructor(props) {
@@ -14,10 +15,15 @@ export default class TodoList extends Component {
       edittable: false,
       editId: '',
       editCard: '',
+      editText: '',
       filter: 'all',
       chrono: false,
       userId: '',
       login: '',
+      modal: {
+        card: '',
+        open: false,
+      },
     };
   }
 
@@ -65,7 +71,10 @@ export default class TodoList extends Component {
       this.state.newCard[0] !== ' ' &&
       this.state.newCard.length < 20
     ) {
-      const newTodo = await api.post('/card', { title: this.state.newCard, index: this.state.cards.length });
+      const newTodo = await api.post('/card', {
+        title: this.state.newCard,
+        index: this.state.cards.length,
+      });
       if (this.state.cards) {
         const oldArr = this.state.cards;
         oldArr.push(newTodo.data);
@@ -113,12 +122,12 @@ export default class TodoList extends Component {
     });
   };
 
-  toggleEditTitle = async (id, title) => {
+  toggleEdit = (id, title) => {
     this.setState({ editId: id });
     this.setState({ editCard: title });
   };
 
-  handleEditSubmit = async (event) => {
+  handleEditTitleSubmit = async (event) => {
     if (
       event.key == 'Enter' &&
       this.state.editCard !== '' &&
@@ -231,10 +240,75 @@ export default class TodoList extends Component {
     this.state.cards.forEach((element, index) => {
       api.put('/put', { id: element.id, index });
     });
-
   };
 
+  onModalOpen = (id) => {
+    const item = this.state.cards.find((element) => {
+      if (element.id == id) return element;
+    });
+    console.log('DASDAS - ', item);
+
+    const newModal = { open: true, card: item };
+
+    this.setState({ modal: newModal, editText: item.text});
+  };
+
+  onModalClose = async() => {
+    const { editText } = this.state
+    const { id } = this.state.modal.card
+
+    await api.put('/put', { id, text: editText });
+    const modal = { open: false, card: '' };
+    this.setState({modal})
+    try {
+      //not the best solution
+      let cards = await api.get('/get', {
+        params: { filter: this.state.filter, chrono: this.state.chrono },
+      });
+      if (!cards) throw new Error('Todo list is empty');
+
+      this.setState({
+        ...this.state,
+        ...{
+          cards: cards.data.cards,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  toggleEditText = async (event) => {
+    console.log('dasda')
+    if (
+      event.key == 'Enter'
+    ) {
+      const value = this.state.editText;
+      const id = this.state.modal.card.id;
+      await api.put('/put', { id, text: value });
+      this.setState({ editId: '' });
+
+      try {
+        //not the best solution
+        let cards = await api.get('/get', {
+          params: { filter: this.state.filter, chrono: this.state.chrono },
+        });
+        if (!cards) throw new Error('Todo list is empty');
+
+        this.setState({
+          ...this.state,
+          ...{
+            cards: cards.data.cards,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
   render() {
+    console.log(this.state)
     const name = this.state.login;
     let todos;
     if (this.state.cards) {
@@ -245,15 +319,19 @@ export default class TodoList extends Component {
             id={element.id}
             index={index}
             title={element.title}
+            text={element.text}
             done={element.done}
             createdAt={element.createdAt}
             onDelete={() => this.onDelete(element.id)}
             onToggle={() => this.onToggleDone(element.id)}
-            toggleEditTitle={() => this.toggleEditTitle(element.id, element.title)}
+            toggleEditTitle={() =>
+              this.toggleEdit(element.id, element.title)
+            }
             editCard={this.state.editCard}
             editId={this.state.editId}
             handleChange={this.handleChange}
-            handleEditSubmit={this.handleEditSubmit}
+            handleEditSubmit={this.handleEditTitleSubmit}
+            onModalOpen={() => this.onModalOpen(element.id)}
           />
         );
       });
@@ -274,28 +352,38 @@ export default class TodoList extends Component {
     }
 
     return (
-      <section className='main'>
-        <section className='main__left'>
-          <input
-            type='button'
-            value='all'
-            className={filter == 'all' ? 'green' : ''}
-            onClick={this.toggleFilter}
-          />
-          <input
-            type='button'
-            value='done'
-            className={filter == 'done' ? 'green' : ''}
-            onClick={this.toggleFilter}
-          />
-          <input
-            type='button'
-            value='undone'
-            className={filter == 'undone' ? 'green' : ''}
-            onClick={this.toggleFilter}
-          />
-        </section>
-        {/* <section className='main__left-toggler' onClick={this.onChronoChange}>
+      <>
+        <Modal
+          isOpened={this.state.modal.open}
+          onModalClose={this.onModalClose}
+          card={this.state.modal.card}
+          edittable={this.state.edittable}
+          editText={this.state.editText}
+          handleChange={this.handleChange}
+          toggleEditText={this.toggleEditText}
+        />
+        <section className='main'>
+          <section className='main__left'>
+            <input
+              type='button'
+              value='all'
+              className={filter == 'all' ? 'green' : ''}
+              onClick={this.toggleFilter}
+            />
+            <input
+              type='button'
+              value='done'
+              className={filter == 'done' ? 'green' : ''}
+              onClick={this.toggleFilter}
+            />
+            <input
+              type='button'
+              value='undone'
+              className={filter == 'undone' ? 'green' : ''}
+              onClick={this.toggleFilter}
+            />
+          </section>
+          {/* <section className='main__left-toggler' onClick={this.onChronoChange}>
           <div className={`diver ${chronoDown}`}>
             <p>По хронологии</p>
           </div>
@@ -304,32 +392,33 @@ export default class TodoList extends Component {
           </div>
         </section> */}
 
-        <section className='main__head'>
-          <h1>Здравствуйте, {name}</h1>
-          <input
-            name='newCard'
-            className='newItem'
-            type='textarea'
-            placeholder='Новое дело ?'
-            value={this.state.newCard}
-            onChange={this.handleChange}
-            onKeyPress={this.handleSubmit}
-          />
-          <h2>Ваши запланированые дела: </h2>
+          <section className='main__head'>
+            <h1>Здравствуйте, {name}</h1>
+            <input
+              name='newCard'
+              className='newItem'
+              type='textarea'
+              placeholder='Новое дело ?'
+              value={this.state.newCard}
+              onChange={this.handleChange}
+              onKeyPress={this.handleSubmit}
+            />
+            <h2>Ваши запланированые дела: </h2>
+          </section>
+          <section className='main__list'>
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              <Droppable droppableId={'column-1'}>
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {todos}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </section>
         </section>
-        <section className='main__list'>
-          <DragDropContext onDragEnd={this.onDragEnd}>
-            <Droppable droppableId={'column-1'}>
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  {todos}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </section>
-      </section>
+      </>
     );
   }
 }
