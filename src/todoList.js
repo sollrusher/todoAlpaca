@@ -113,7 +113,7 @@ export default class TodoList extends Component {
     });
   };
 
-  toggleEdit = async (id, title) => {
+  toggleEditTitle = async (id, title) => {
     this.setState({ editId: id });
     this.setState({ editCard: title });
   };
@@ -249,7 +249,7 @@ export default class TodoList extends Component {
             createdAt={element.createdAt}
             onDelete={() => this.onDelete(element.id)}
             onToggle={() => this.onToggleDone(element.id)}
-            toggleEdit={() => this.toggleEdit(element.id, element.title)}
+            toggleEditTitle={() => this.toggleEditTitle(element.id, element.title)}
             editCard={this.state.editCard}
             editId={this.state.editId}
             handleChange={this.handleChange}

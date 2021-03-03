@@ -10,7 +10,7 @@ export default function TodoItem({
   createdAt,
   onDelete,
   onToggle,
-  toggleEdit,
+  toggleEditTitle,
   editCard,
   editId,
   handleChange,
@@ -46,8 +46,8 @@ export default function TodoItem({
     ref={provided.innerRef}
     >
       <div className={done ? 'done' : ''} onDoubleClick={onToggle}>
-        <span className='task-title' onClick={toggleEdit}>{edittable ? inputEdit : title}</span>
-        <span className="edit" onClick={toggleEdit}>
+        <span className='task-title' onClick={toggleEditTitle}>{edittable ? inputEdit : title}</span>
+        <span className="edit" onClick={toggleEditTitle}>
           &#10000;
         </span>
         text
