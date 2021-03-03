@@ -72,3 +72,11 @@ div{
   font-size: 0.4em;
   opacity: 0.5;
 }
+
+.havetext{
+  background-color: rgba(0, 0, 109, 0.158);
+}
+
+.notext{
+  background-color: rgba(255, 0, 0, 0.062);
+}
