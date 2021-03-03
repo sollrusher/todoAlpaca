@@ -15,6 +15,7 @@ export default function TodoItem({
   editId,
   handleChange,
   handleEditSubmit,
+  onModalOpen,
 }) {
   let edittable = false;
   if (id == editId) {
@@ -47,10 +48,8 @@ export default function TodoItem({
     >
       <div className={done ? 'done' : ''} onDoubleClick={onToggle}>
         <span className='task-title' onClick={toggleEditTitle}>{edittable ? inputEdit : title}</span>
-        <span className="edit" onClick={toggleEditTitle}>
-          &#10000;
-        </span>
-        text
+
+        <p onClick={onModalOpen}>text</p>
         <span className="delete" onClick={onDelete} />
         <p className="dateOfCreate">{dateOfCreate}</p>
       </div>
