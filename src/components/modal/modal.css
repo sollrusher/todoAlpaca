@@ -27,3 +27,23 @@
     max-height: 100%;
     -ms-overflow-style: none;
 }
+
+.modal__title{
+    text-align: center;
+    margin: 0;
+}
+
+.modal__text{
+    width: 100%;
+    outline: none;
+    border: none;
+    font-size: 1.5em;
+}
+
+.modal__dateOfCreate{
+    display: flex;
+    font-size: 0.8em;
+    opacity: 0.5;
+    margin-bottom: 0;
+    justify-content: flex-end;
+}
