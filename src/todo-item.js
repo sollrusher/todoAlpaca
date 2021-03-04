@@ -24,13 +24,22 @@ export default function TodoItem({
   }
 
   let haveText = '';
-  if(text) haveText='havetext'
+  let sliceText = ''
+  if(text) {
+  haveText='havetext' ; 
+  if(text.length > 15)
+  sliceText = text.slice(0,35)+'...'
+  else 
+  sliceText= text;
+}
   else haveText='notext'
+
+  
 
   let dateOfCreate = createdAt;
 
   const regex = /[TZ]/gm;
-  dateOfCreate = dateOfCreate.replace(regex, ' ');
+  dateOfCreate = dateOfCreate.replace(regex, ' ').slice(0,-5);
 
   const inputEdit = (
     <input
@@ -50,12 +59,14 @@ export default function TodoItem({
     {...provided.draggableProps}
     {...provided.dragHandleProps}
     ref={provided.innerRef}
+    onClick={onModalOpen}
     >
+      <span className="delete" onClick={onDelete} />
       <div className={done ? 'done' : ''} onDoubleClick={onToggle}>
         <span className='task-title' onClick={toggleEditTitle}>{edittable ? inputEdit : title}</span>
 
-        <p onClick={onModalOpen}>{text || 'text'}</p>
-        <span className="delete" onClick={onDelete} />
+        <p className="task-text">{sliceText}</p>
+        
         <p className="dateOfCreate">{dateOfCreate}</p>
       </div>
     </li>
