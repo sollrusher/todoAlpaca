@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+let baseURL;
+if(process.env.NODE_ENV == 'development')baseURL= 'http://127.0.0.1:5000/'
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:5000/',
+  baseURL,
   responseType: 'json',
 });
 
