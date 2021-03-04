@@ -29,10 +29,17 @@ export default class TodoList extends Component {
 
   escListener = (event) => {
     if (event.key === 'Escape') {
-      this.setState({ editId: '', editCard: '' });
+      this.setState({ editId: '', editCard: '', modal: {open: false, card: ''} });
       return;
     }
   };
+
+  exitClickListener = (event) =>{
+    if(event.target.className === 'modal__wrapper open'){
+      this.setState({modal: {open: false, card: ''} });
+      return;
+    }
+  }
 
   async componentDidMount() {
     try {
@@ -50,6 +57,9 @@ export default class TodoList extends Component {
       });
 
       document.addEventListener('keydown', this.escListener, false);
+      const wrapper = document.getElementsByClassName('modal__wrapper')
+      console.log(wrapper)
+      document.addEventListener('click', this.exitClickListener, false);
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +67,8 @@ export default class TodoList extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.escListener, false);
+    const wrapper = document.getElementsByClassName('modal__wrapper')
+    document.removeEventListener('click', this.exitClickListener, false);
   }
 
   handleChange = (event) => {
