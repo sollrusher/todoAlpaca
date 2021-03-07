@@ -59,15 +59,16 @@ export default function TodoItem({
     {...provided.draggableProps}
     {...provided.dragHandleProps}
     ref={provided.innerRef}
-    onClick={onModalOpen}
+
     >
       <span className="delete" onClick={onDelete} />
       <div className={done ? 'done' : ''} onDoubleClick={onToggle}>
         <span className='task-title' onClick={toggleEditTitle}>{edittable ? inputEdit : title}</span>
-
+        <div onClick={onModalOpen}>
         <p className="task-text">{sliceText}</p>
         
         <p className="dateOfCreate">{dateOfCreate}</p>
+        </div>
       </div>
     </li>
     )}
