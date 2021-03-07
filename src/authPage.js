@@ -78,7 +78,6 @@ function Auth(props) {
   };
 
   const classes = useStyles();
-  console.log(authData);
   return (
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
@@ -113,10 +112,6 @@ function Auth(props) {
             autoComplete='current-password'
             onChange={handleInputChange}
           />
-          <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
-          />
           <Button
             type='button'
             fullWidth 
@@ -127,11 +122,6 @@ function Auth(props) {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link to="/register">Регистрация</Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>
