@@ -267,7 +267,16 @@ export default class TodoList extends Component {
     });
   };
 
-  onModalOpen = (id) => {
+  onModalOpen = (event, id) => {
+    if (
+      event.target.localName == 'h2' ||
+      event.target.localName == 'input' ||
+      event.target.localName == 'button' ||
+      event.target.localName == 'span' ||
+      event.target.localName == 'path' ||
+      event.target.localName == 'svg'
+    )
+      return;
     const item = this.state.cards.find((element) => {
       if (element.id == id) return element;
     });
@@ -349,7 +358,8 @@ export default class TodoList extends Component {
             editId={this.state.editId}
             handleChange={this.handleChange}
             handleEditSubmit={this.handleEditTitleSubmit}
-            onModalOpen={() => this.onModalOpen(element.id)}
+            onModalOpen={(event) => this.onModalOpen(event, element.id)}
+            modalOpen={this.state.modal.open}
           />
         );
       });

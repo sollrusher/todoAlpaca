@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   dateOfCreate: {
     marginLeft: '1%',
   },
+  done: (props) => ({
+    textDecoration: props.done ? 'line-through' : '',
+  }),
 }));
 
 export default function TodoItem({
@@ -56,24 +59,21 @@ export default function TodoItem({
   handleChange,
   handleEditSubmit,
   onModalOpen,
+  modalOpen,
 }) {
-  const classes = useStyles({ text });
+  const classes = useStyles({ text, done });
 
   let edittable = false;
   if (id == editId) {
     edittable = true;
+    modalOpen ? (edittable = false) : (edittable = true);
   }
 
-  let haveText = '';
   let sliceText = '';
-  let hasDone = '';
-  done ? (hasDone = 'done') : (hasDone = '');
-
   if (text) {
-    haveText = 'havetext';
-    if (text.length > 15) sliceText = text.slice(0, 35) + '...';
+    if (text.length > 35) sliceText = text.slice(0, 35) + '...';
     else sliceText = text;
-  } else haveText = 'notext';
+  }
 
   let dateOfCreate = createdAt;
   const regex = /[TZ]/gm;
@@ -100,7 +100,7 @@ export default function TodoItem({
           ref={provided.innerRef}
           onClick={onModalOpen}
         >
-          <CardContent className={hasDone} >
+          <CardContent className={classes.done}>
             <Typography variant='h5' component='h2' onClick={toggleEditTitle}>
               {edittable ? inputEdit : title}
             </Typography>
