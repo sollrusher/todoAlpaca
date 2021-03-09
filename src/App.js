@@ -15,6 +15,17 @@ import PrivateRoute from './utils/privateRoute';
 import { connect } from 'react-redux';
 import { logoutUser } from './store/action/action';
 
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+} from '@material-ui/core';
+
+import MenuIcon from '@material-ui/icons/Menu';
+
 const mapStateToProps = (store) => ({
   initialized: store.initialized,
   store,
@@ -24,34 +35,57 @@ const mapDispatchToProps = {
   logoutUser,
 };
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
+
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 function App(props) {
   const { initialized, logoutUser } = props;
-  const classes = `logout ${initialized ? '' : 'off'}`;
+  const logoutClass = `logout ${initialized ? '' : 'off'}`;
+  const classes = useStyles();
   return (
+    <>
     <Router>
-      <input
-        className={classes}
-        type="button"
-        value="Выйти"
-        onClick={() => logoutUser()}
-      />
-
-      <div className="app">
-        <Switch>
-          <Route exact path="/">
-            {initialized ? <Redirect to="/todolist" /> : <Auth />}
-          </Route>
-          <Route path="/register">
-            {initialized ? <Redirect to="/todolist" /> : <Register />}
-          </Route>
-          <PrivateRoute path="/todolist" auth={initialized}>
-            <TodoList />
-          </PrivateRoute>
-        </Switch>
-      </div>
-    </Router>
+      <div className={classes.root}>
+        <AppBar position='static'>
+          <Toolbar>
+            <Typography variant='h4' className={classes.title}>
+              ToDo List
+            </Typography>
+            {!initialized?<>
+            <Button color='inherit' component={Link} to="/">Login</Button>
+            <Button color='inherit' component={Link} to="/register">Register</Button>
+            </>: 
+            <Button color='inherit' onClick={() => logoutUser()} component={Link} to="/">Logout</Button>
+            }
+          </Toolbar>
+        </AppBar>
+      </div>      
+        <div className='app'>
+          <Switch>
+            <Route exact path='/'>
+              {initialized ? <Redirect to='/todolist' /> : <Auth />}
+            </Route>
+            <Route path='/register'>
+              {initialized ? <Redirect to='/todolist' /> : <Register />}
+            </Route>
+            <PrivateRoute path='/todolist' auth={initialized}>
+              <TodoList />
+            </PrivateRoute>
+          </Switch>
+        </div>
+      </Router>
+    </>
   );
 }
 
