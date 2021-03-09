@@ -6,6 +6,14 @@ import api from './utils/api';
 import { getUser } from './utils/get-user';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Modal from './components/modal/modal';
+import {
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Input,
+  Typography,
+} from '@material-ui/core';
 
 export default class TodoList extends Component {
   constructor(props) {
@@ -29,17 +37,25 @@ export default class TodoList extends Component {
 
   escListener = (event) => {
     if (event.key === 'Escape') {
-      this.setState({ editId: '', editCard: '', modal: {open: false, card: ''} });
+      this.setState({
+        editId: '',
+        editCard: '',
+        modal: { open: false, card: '' },
+      });
       return;
     }
   };
 
-  exitClickListener = (event) =>{
-    if(event.target.className === 'modal__wrapper open'){
-      this.setState({editId: '', editCard: '',modal: {open: false, card: ''} });
+  exitClickListener = (event) => {
+    if (event.target.className === 'modal__wrapper open') {
+      this.setState({
+        editId: '',
+        editCard: '',
+        modal: { open: false, card: '' },
+      });
       return;
     }
-  }
+  };
 
   async componentDidMount() {
     try {
@@ -258,16 +274,16 @@ export default class TodoList extends Component {
 
     const newModal = { open: true, card: item };
 
-    this.setState({ modal: newModal, editText: item.text});
+    this.setState({ modal: newModal, editText: item.text });
   };
 
-  onModalClose = async() => {
-    const { editText } = this.state
-    const { id } = this.state.modal.card
+  onModalClose = async () => {
+    const { editText } = this.state;
+    const { id } = this.state.modal.card;
 
     await api.put('/put', { id, text: editText });
     const modal = { open: false, card: '' };
-    this.setState({modal})
+    this.setState({ modal });
     try {
       //not the best solution
       let cards = await api.get('/get', {
@@ -287,9 +303,7 @@ export default class TodoList extends Component {
   };
 
   toggleEditText = async (event) => {
-    if (
-      event.key == 'Enter'
-    ) {
+    if (event.key == 'Enter') {
       const value = this.state.editText;
       const id = this.state.modal.card.id;
       await api.put('/put', { id, text: value });
@@ -312,7 +326,7 @@ export default class TodoList extends Component {
         console.log(error);
       }
     }
-  }
+  };
 
   render() {
     const name = this.state.login;
@@ -330,9 +344,7 @@ export default class TodoList extends Component {
             createdAt={element.createdAt}
             onDelete={() => this.onDelete(element.id)}
             onToggle={() => this.onToggleDone(element.id)}
-            toggleEditTitle={() =>
-              this.toggleEdit(element.id, element.title)
-            }
+            toggleEditTitle={() => this.toggleEdit(element.id, element.title)}
             editCard={this.state.editCard}
             editId={this.state.editId}
             handleChange={this.handleChange}
@@ -368,8 +380,8 @@ export default class TodoList extends Component {
           handleChange={this.handleChange}
           toggleEditText={this.toggleEditText}
         />
-        <section className='main'>
-          <section className='main__left'>
+        <section>
+          {/* <section className='main__left'>
             <input
               type='button'
               value='all'
@@ -388,7 +400,7 @@ export default class TodoList extends Component {
               className={filter == 'undone' ? 'green' : ''}
               onClick={this.toggleFilter}
             />
-          </section>
+          </section> */}
           {/* <section className='main__left-toggler' onClick={this.onChronoChange}>
           <div className={`diver ${chronoDown}`}>
             <p>По хронологии</p>
@@ -398,7 +410,7 @@ export default class TodoList extends Component {
           </div>
         </section> */}
 
-          <section className='main__head'>
+          {/* <section className='main__head'>
             <h1>Здравствуйте, {name}</h1>
             <input
               name='newCard'
@@ -410,7 +422,32 @@ export default class TodoList extends Component {
               onKeyPress={this.handleSubmit}
             />
             <h2>Ваши запланированые дела: </h2>
-          </section>
+          </section> */}
+
+          <div>
+            <Container maxWidth='sm'>
+              <Typography
+                component='h1'
+                variant='h2'
+                align='center'
+                color='textPrimary'
+                gutterBottom
+              >
+                {`Здравствуйте, ${name}`}
+              </Typography>
+
+              <Input
+                name='newCard'
+                className='newItem'
+                placeholder='Input title you todos here'
+                value={this.state.newCard}
+                onChange={this.handleChange}
+                onKeyPress={this.handleSubmit}
+              />
+            </Container>
+            <Divider variant='middle' />
+          </div>
+
           <section className='main__list'>
             <DragDropContext onDragEnd={this.onDragEnd}>
               <Droppable droppableId={'column-1'}>

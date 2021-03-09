@@ -19,13 +19,7 @@
 }
 
 .main__list {
-    display: flex;
-    width: 500px;
-}
-
-.main__list li{
-   font-size: 2em;
-   margin: 15px;
+    margin: 10px 15%;
 }
 
 .hide{
