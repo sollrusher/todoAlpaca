@@ -8,9 +8,9 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Modal from './components/modal/modal';
 import {
   Button,
+  ButtonGroup,
   Container,
   Divider,
-  Grid,
   Input,
   Typography,
 } from '@material-ui/core';
@@ -184,8 +184,8 @@ export default class TodoList extends Component {
   };
 
   toggleFilter = async (event) => {
-    const value = event.target.value;
-
+    let value = event.target.value;
+    if (!value) value = event.target.parentNode.value;
     this.setState({ filter: value });
 
     try {
@@ -263,7 +263,7 @@ export default class TodoList extends Component {
     });
 
     const cards = this.state.cards.map((element, index) => {
-      return {...element, index}
+      return { ...element, index };
     });
     api.put('/put', cards);
   };
@@ -365,21 +365,6 @@ export default class TodoList extends Component {
         );
       });
     }
-    let hider;
-    this.state.edittable ? (hider = '') : (hider = 'hide');
-
-    let { filter, chrono } = this.state;
-    let chronoDown;
-    let chronoUp;
-
-    if (chrono) {
-      chronoUp = 'greendiv';
-      chronoDown = 'reddiv';
-    } else {
-      chronoUp = 'reddiv';
-      chronoDown = 'greendiv';
-    }
-
     return (
       <>
         <Modal
@@ -392,49 +377,6 @@ export default class TodoList extends Component {
           toggleEditText={this.toggleEditText}
         />
         <section>
-          {/* <section className='main__left'>
-            <input
-              type='button'
-              value='all'
-              className={filter == 'all' ? 'green' : ''}
-              onClick={this.toggleFilter}
-            />
-            <input
-              type='button'
-              value='done'
-              className={filter == 'done' ? 'green' : ''}
-              onClick={this.toggleFilter}
-            />
-            <input
-              type='button'
-              value='undone'
-              className={filter == 'undone' ? 'green' : ''}
-              onClick={this.toggleFilter}
-            />
-          </section> */}
-          {/* <section className='main__left-toggler' onClick={this.onChronoChange}>
-          <div className={`diver ${chronoDown}`}>
-            <p>По хронологии</p>
-          </div>
-          <div className={`diver ${chronoUp}`}>
-            <p>В обратной хронологии</p>
-          </div>
-        </section> */}
-
-          {/* <section className='main__head'>
-            <h1>Здравствуйте, {name}</h1>
-            <input
-              name='newCard'
-              className='newItem'
-              type='textarea'
-              placeholder='Новое дело ?'
-              value={this.state.newCard}
-              onChange={this.handleChange}
-              onKeyPress={this.handleSubmit}
-            />
-            <h2>Ваши запланированые дела: </h2>
-          </section> */}
-
           <div>
             <Container maxWidth='sm'>
               <Typography
@@ -458,7 +400,23 @@ export default class TodoList extends Component {
             </Container>
             <Divider variant='middle' />
           </div>
-
+          <div className='filters'>
+            <ButtonGroup
+              color='primary'
+              aria-label='button group'
+              onClick={this.toggleFilter}
+            >
+              <Button label='all' value='all'>
+                All
+              </Button>
+              <Button label='done' value='done'>
+                Done
+              </Button>
+              <Button label='undone' value='undone'>
+                undone
+              </Button>
+            </ButtonGroup>
+          </div>
           <section className='main__list'>
             <DragDropContext onDragEnd={this.onDragEnd}>
               <Droppable droppableId={'column-1'}>
