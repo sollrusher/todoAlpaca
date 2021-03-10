@@ -262,9 +262,10 @@ export default class TodoList extends Component {
       },
     });
 
-    this.state.cards.forEach((element, index) => {
-      api.put('/put', { id: element.id, index });
+    const cards = this.state.cards.map((element, index) => {
+      return {...element, index}
     });
+    api.put('/put', cards);
   };
 
   onModalOpen = (event, id) => {

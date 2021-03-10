@@ -16,21 +16,34 @@ router.put('/put', verifyToken, async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
+    const { userId } = req;
+    if (Array.isArray(req.body)) {
+      const cards = req.body.map(async (element) => {
+        const { id } = element;
+        if (!id) throw new ServerError('Empty fields', 400);
+
+        const oldCard = await models.Cards.findOne({ where: { id, userId } });
+        if (!oldCard) throw new ServerError('Card not found', 404);
+
+        const card = { ...oldCard.dataValues, ...element };
+
+        await models.Cards.update(card, { where: { id, userId } });
+        
+        return card;
+      });
+      res.send('Cards update was succed');
+      return
+    }
     const { id } = req.body;
     if (!id) throw new ServerError('Empty fields', 400);
 
-    const { userId } = req;
-  
     const oldCard = await models.Cards.findOne({ where: { id, userId } });
     if (!oldCard) throw new ServerError('Card not found', 404);
 
-    const card = {...oldCard.dataValues, ...req.body}
+    const card = { ...oldCard.dataValues, ...req.body };
 
-    await models.Cards.update(
-      card,
-      { where: { id, userId } },
-    );
-      res.send(card)
+    await models.Cards.update(card, { where: { id, userId } });
+    res.send(card);
   } catch (error) {
     return res.status(error.status || 400).json(error.message);
   }
